@@ -1,52 +1,12 @@
-"""M1 最小图：planner -> writer。验收：demo 主题出 500 字草稿。"""
-from langgraph.graph import StateGraph, END
-from state import ResearchState
-from llm import get_llm
-
-llm = get_llm()
-
-def planner(state: ResearchState) -> dict:
-    """节点 1：把主题拆成大纲（M3 会加 interrupt 人工确认）。"""
-    resp = llm.invoke(
-        f"你是调研规划专家。主题：{state['topic']}。\n"
-        "请输出一份 4-6 节的调研大纲（Markdown 二级标题列表），"
-        "每节一句话说明要查什么。只输出大纲本身。"
-    )
-    return {"outline": resp.content}
-
-def writer(state: ResearchState) -> dict:
-    """节点 2：按大纲写草稿。M2 会升级为带引用的成稿。"""
-    resp = llm.invoke(
-        f"主题：{state['topic']}\n大纲：\n{state['outline']}\n\n"
-        "请按大纲写一篇 500 字左右的中文调研草稿（背景知识写作，无需检索）。"
-    )
-    return {"draft": resp.content, "revision_count": 0}
-
-def build():
-    g = StateGraph(ResearchState)
-    g.add_node("planner", planner)
-    g.add_node("writer", writer)
-    g.set_entry_point("planner")
-    g.add_edge("planner", "writer")
-    g.add_edge("writer", END)
-    return g.compile()
-
-if __name__ == "__main__":
-    app = build()
-    result = app.invoke({"topic": "端侧 AI 芯片格局（2025-2026）"})
-    print("===== 大纲 =====")
-    print(result["outline"])
-    print("===== 草稿 =====")
-    print(result["draft"])
-
 """M1 模块 3：planner -> [interrupt 人工确认大纲] -> writer。
 
 新增概念：interrupt（人机协同）+ Command(resume) + MemorySaver。
+（原先塞在 graph.py 文件后半段，与 M1 版互相覆盖模块级名字，已拆出。）
 """
 from langgraph.graph import StateGraph, END
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.types import interrupt, Command
-from state import ResearchState
+from learning.state import ResearchState
 from llm import get_llm
 
 llm = get_llm()
@@ -70,7 +30,9 @@ def human_review(state: ResearchState) -> dict:
     )
     if isinstance(feedback, dict) and feedback.get("type") == "continue":
         return {}                       # 人工放行，大纲不动
-    # 否则 feedback 是修改意见字符串，让模型按意见重写大纲
+    # 与 graph_full 保持一致：非字符串或空白输入一律放行，防脏数据进 prompt
+    if not isinstance(feedback, str) or not feedback.strip():
+        return {}
     resp = llm.invoke(
         f"主题：{state['topic']}\n原大纲：\n{state['outline']}\n\n"
         f"人工修改意见：{feedback}\n\n请输出修改后的完整大纲（Markdown），只输出大纲本身。"
@@ -121,4 +83,3 @@ if __name__ == "__main__":
     print(result["outline"])
     print("\n===== 草稿 =====")
     print(result["draft"])
-

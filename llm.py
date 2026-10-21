@@ -6,6 +6,9 @@ from langchain_openai import ChatOpenAI
 load_dotenv()
 
 def get_llm():
+    # 注意：环境变量 HTTP(S)_PROXY 会被底层 httpx 读取，LLM 请求也会走代理。
+    # 如果代理只用于搜索翻墙、LLM 想直连 dashscope，
+    # 可改为传 http_client=httpx.Client(trust_env=False)（需 import httpx）。
     return ChatOpenAI(
         model=os.getenv("LLM_MODEL", "qwen-plus"),
         api_key=os.getenv("DASHSCOPE_API_KEY"),

@@ -18,10 +18,16 @@ from pydantic import BaseModel
 
 app = FastAPI(title="Research Graph")
 
-events: "queue.Queue[dict]" = queue.Queue()
+# 每个 SSE 订阅者一个独立队列，事件广播给所有订阅者。
+# 之前是全局单队列：多个页面同时连 /events 会互相抢事件，A 拿走 report 后 B 永远收不到。
+_subscribers: "list[queue.Queue]" = []
+_sub_lock = threading.Lock()
+
 resume_value = None
 current_thread = None
+waiting_for_resume = threading.Event()   # 只有图真的在 interrupt 处等待时，/resume 才生效
 run_lock = threading.Lock()
+RESUME_TIMEOUT = 600                     # 等人工确认的最长秒数，超时终止本次运行
 
 # 节点顺序（用于把下一个节点标成 active）
 NODE_ORDER = [
@@ -120,7 +126,9 @@ function listen(){
     }
     if (m.type === "report"){
       $("log").textContent = m.text;
-      setStatus(m.ok ? "完成" : "失败");
+      if (!m.ok){ setStatus("失败"); }
+      else if (m.quality === false){ setStatus("完成（有未解决问题：" + m.citation_errors + " 处引用）"); }
+      else { setStatus("完成"); }
       $("btn-start").disabled = false;
       if (es){ es.close(); es = null; }
     }
@@ -157,9 +165,16 @@ def start(body: StartBody):
     if not run_lock.acquire(blocking=False):
         return {"ok": False, "error": "已有任务在跑"}
     resume_value = None
+    waiting_for_resume.clear()
     current_thread = f"web-{uuid.uuid4().hex[:8]}"
-    while not events.empty():
-        events.get_nowait()
+    # 清掉各订阅者上次运行残留的事件，避免新任务被旧事件污染
+    with _sub_lock:
+        for q in _subscribers:
+            while True:
+                try:
+                    q.get_nowait()
+                except queue.Empty:
+                    break
     threading.Thread(target=run_graph, args=(body.topic.strip(), current_thread), daemon=True).start()
     return {"ok": True, "thread": current_thread}
 
@@ -167,19 +182,31 @@ def start(body: StartBody):
 @app.post("/resume")
 def resume(body: ResumeBody):
     global resume_value
+    # 校验当前确实在等确认：否则这里写入的值会被下一次 interrupt 直接消费掉，
+    # 等于跳过人工确认
+    if not waiting_for_resume.is_set():
+        return {"ok": False, "error": "当前没有等待确认的任务"}
     text = body.feedback.strip()
     resume_value = text if text else {"type": "continue"}
     return {"ok": True}
 
 
+def broadcast(item: dict):
+    """把事件推给所有 SSE 订阅者。"""
+    with _sub_lock:
+        subs = list(_subscribers)
+    for q in subs:
+        q.put(item)
+
+
 def push_node(name: str):
     ui = UI_NAME.get(name, name)
-    events.put({"type": "node_done", "name": ui})
+    broadcast({"type": "node_done", "name": ui})
     idx = NODE_ORDER.index(name) if name in NODE_ORDER else -1
     if idx >= 0 and idx + 1 < len(NODE_ORDER):
         nxt = NODE_ORDER[idx + 1]
         if nxt != "revise":
-            events.put({"type": "node", "name": UI_NAME.get(nxt, nxt)})
+            broadcast({"type": "node", "name": UI_NAME.get(nxt, nxt)})
 
 
 def summarize(node: str, update) -> str:
@@ -204,61 +231,97 @@ def summarize(node: str, update) -> str:
 
 def run_graph(topic: str, thread_id: str):
     global resume_value
-    cfg = {"configurable": {"thread_id": thread_id}}
+    cfg = {"configurable": {"thread_id": thread_id}, "max_concurrency": 3}
+    app_graph = None
     try:
-        import graph_full
-        app_graph = graph_full.build()
-    except Exception as e:
-        events.put({"type": "report", "ok": False, "text": f"图装配失败：{e}"})
-        run_lock.release()
-        return
+        try:
+            import graph_full
+            app_graph = graph_full.build()
+        except Exception as e:
+            broadcast({"type": "report", "ok": False, "text": f"图装配失败：{e}"})
+            return
 
-    payload = {"topic": topic}
-    try:
-        while True:
-            interrupted = None
-            for chunk in app_graph.stream(payload, config=cfg, stream_mode="updates"):
-                if "__interrupt__" in chunk:
-                    interrupted = chunk["__interrupt__"]
-                    continue
-                for node, update in chunk.items():
-                    if node.startswith("__"):
+        payload = {"topic": topic}
+        try:
+            while True:
+                interrupted = None
+                for chunk in app_graph.stream(payload, config=cfg, stream_mode="updates"):
+                    if "__interrupt__" in chunk:
+                        interrupted = chunk["__interrupt__"]
                         continue
-                    push_node(node)
-                    line = summarize(node, update)
-                    if line:
-                        events.put({"type": "log", "text": f"[{node}] {line}"})
-            if interrupted is None:
-                break
-            value = interrupted[0].value if interrupted else {}
-            events.put({"type": "interrupt", "outline": value.get("outline", "")})
-            while resume_value is None:
-                time.sleep(0.2)
-            payload = Command(resume=resume_value)
-            resume_value = None
+                    for node, update in chunk.items():
+                        if node.startswith("__"):
+                            continue
+                        push_node(node)
+                        line = summarize(node, update)
+                        if line:
+                            broadcast({"type": "log", "text": f"[{node}] {line}"})
+                if interrupted is None:
+                    break
+                value = interrupted[0].value if interrupted else {}
+                broadcast({"type": "interrupt", "outline": value.get("outline", "")})
+                # 等人工确认，带超时：用户关页面不确认时线程不能永远挂着，
+                # 否则 run_lock 永不释放，之后所有 /start 都会报「已有任务在跑」
+                waiting_for_resume.set()
+                waited = 0.0
+                while resume_value is None and waited < RESUME_TIMEOUT:
+                    time.sleep(0.2)
+                    waited += 0.2
+                waiting_for_resume.clear()
+                if resume_value is None:
+                    broadcast({"type": "report", "ok": False,
+                               "text": f"等待大纲确认超时（{RESUME_TIMEOUT // 60} 分钟），本次运行已终止"})
+                    return
+                payload = Command(resume=resume_value)
+                resume_value = None
 
-        state = app_graph.get_state(cfg).values
-        draft = state.get("draft") or "(未生成报告)"
-        events.put({"type": "report", "ok": True, "text": draft})
-    except Exception as e:
-        events.put({"type": "report", "ok": False, "text": f"图执行失败：{type(e).__name__}: {e}"})
+            state = app_graph.get_state(cfg).values
+            draft = state.get("draft") or "(未生成报告)"
+            review = state.get("review_report") or {}
+            quality_ok = not review.get("blocking") and not (state.get("citation_errors") or [])
+            broadcast({
+                "type": "report",
+                "ok": True,
+                "text": draft,
+                "quality": quality_ok,
+                "citation_errors": len(state.get("citation_errors") or []),
+            })
+        except Exception as e:
+            broadcast({"type": "report", "ok": False,
+                       "text": f"图执行失败：{type(e).__name__}: {e}"})
     finally:
-        if run_lock.locked():
-            run_lock.release()
+        # 关掉本次运行专用的 sqlite 连接，避免每次「开始」泄漏一个连接
+        if app_graph is not None:
+            conn = getattr(app_graph, "_sqlite_conn", None)
+            if conn is not None:
+                try:
+                    conn.close()
+                except Exception:
+                    pass
+        run_lock.release()
 
 
 @app.get("/events")
 def sse():
+    q: "queue.Queue" = queue.Queue()
+    with _sub_lock:
+        _subscribers.append(q)
+
     def gen():
-        while True:
-            try:
-                item = events.get(timeout=20)
-            except queue.Empty:
-                yield ": keep-alive\n\n"
-                continue
-            yield f"data: {json.dumps(item, ensure_ascii=False)}\n\n"
-            if item.get("type") == "report":
-                break
+        try:
+            while True:
+                try:
+                    item = q.get(timeout=20)
+                except queue.Empty:
+                    yield ": keep-alive\n\n"
+                    continue
+                yield f"data: {json.dumps(item, ensure_ascii=False)}\n\n"
+                if item.get("type") == "report":
+                    break
+        finally:
+            with _sub_lock:
+                if q in _subscribers:
+                    _subscribers.remove(q)
     return StreamingResponse(gen(), media_type="text/event-stream",
                              headers={"Cache-Control": "no-cache"})
 

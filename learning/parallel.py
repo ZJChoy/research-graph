@@ -6,8 +6,8 @@
 import time
 from langgraph.graph import StateGraph, END
 from langgraph.types import Send
-from state import ResearchState
-from notes import ResearchNotes
+from learning.state import ResearchState
+from learning.notes import ResearchNotes
 from researcher import research_one
 
 
@@ -31,8 +31,12 @@ def state_topic_fallback(outline: str) -> str:
     return outline[:50]
 
 
-def research_one(state: dict) -> dict:
-    """Reduce 阶段的单路：跑一路调研，把笔记并入总状态。"""
+def research_one_node(state: dict) -> dict:
+    """Reduce 阶段的单路：跑一路调研，把笔记并入总状态。
+
+    注意：不能叫 research_one——会覆盖上面 from researcher import 的同名函数，
+    导致函数体内自调用、无限递归。
+    """
     r = research_one(state["subquestion"])
     return {"research_notes": [r]}
 
@@ -44,15 +48,16 @@ def merge_notes(a: list, b: list | None) -> list:
 
 if __name__ == "__main__":
     # 冒烟：串行跑两个子问题对比并行（真实并行在 graph 里由 Send 触发）
-    from researcher import research_one
+    # research_one 现在返回 dict（{"subquestion", "notes"}），用下标访问
+    from researcher import research_one as run_research
     subs = ["地平线征程6 的算力与量产", "高通骁龙 Ride 平台的量产车型"]
     t0 = time.time()
-    results = [research_one(s) for s in subs]
+    results = [run_research(s) for s in subs]
     serial = time.time() - t0
-    total = sum(len(r.notes) for r in results)
+    total = sum(len(r["notes"]) for r in results)
     print(f"串行跑 {len(subs)} 路：{serial:.1f}s，共 {total} 条笔记")
     for r in results:
-        print(f"== {r.subquestion} ({len(r.notes)} 条)")
-        for n in r.notes[:3]:
+        print(f"== {r['subquestion']} ({len(r['notes'])} 条)")
+        for n in r["notes"][:3]:
             print(f"  - {n['fact'][:60]}  [{n['source_title'][:30]}]")
 

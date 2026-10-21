@@ -25,8 +25,13 @@ def check_all(topic: str, notes: list[dict]) -> dict:
     """返回 {conflicts: [...], solitary: [...]}；LLM 失败返回空结果（降级）。"""
     flat = []
     for r in notes:
-        for n in r["notes"]:  # notes 已形态归一为纯 dict
-            flat.append(f"- {n['fact']}（来源: {n['source_title']}）")
+        if not isinstance(r, dict):     # 上游形态异常就跳过这一路，不让核查链断掉
+            continue
+        for n in (r.get("notes") or []):   # notes 已形态归一为纯 dict
+            fact = n.get("fact", "").strip()
+            if not fact:
+                continue
+            flat.append(f"- {fact}（来源: {n.get('source_title', '')}）")
     if len(flat) < 2:
         return {"conflicts": [], "solitary": []}
     resp = llm.invoke(CHECK_PROMPT.format(topic=topic, notes="\n".join(flat)))

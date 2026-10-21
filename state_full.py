@@ -19,3 +19,7 @@ class GraphState(TypedDict, total=False):
     draft: str
     review_report: dict
     revision_count: int
+    citation_errors: list       # 越界编号 / 引用与来源不符，critic 硬判不通过
+    citation_meta: dict         # finalize_report 的统计（cited/dropped/model_bib_lines）
+    grounding_warnings: list    # 二元词重合度偏低等软警告，只记录不返工
+    final_notes: list           # 报告 [n] 实际对应的笔记（截断后的编号口径）

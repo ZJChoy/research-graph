@@ -4,6 +4,7 @@
 LLM 只做'抽取'不做'创作'：笔记里的事实必须能在正文里找到。
 """
 import json
+from grounding import unsupported_numbers
 from llm import get_llm
 from search import retrieve
 
@@ -20,9 +21,9 @@ EXTRACT_PROMPT = """你是事实抽取员。下面是关于「{subquestion}」�
 4. 输出 JSON：{{"notes": [{{"fact": "...", "citation": "S1"}}, ...]}}
 只输出 JSON。"""
 
-def research_one(subquestion: str) -> dict:
+def research_one(subquestion: str, topic: str | None = None) -> dict:
     """单路调研：检索 → 抽取。返回 dict（图内统一形态，可序列化）。任何失败降级为空笔记。"""
-    pages = retrieve(subquestion)
+    pages = retrieve(subquestion, topic)
     if not pages:
         return {"subquestion": subquestion, "notes": []}
 
@@ -33,6 +34,7 @@ def research_one(subquestion: str) -> dict:
     )
     url_map = {f"S{i+1}": p["url"] for i, p in enumerate(pages)}
     title_map = {f"S{i+1}": p["source_title"] for i, p in enumerate(pages)}
+    content_map = {f"S{i+1}": p["content"] for i, p in enumerate(pages)}
 
     resp = llm.invoke(EXTRACT_PROMPT.format(subquestion=subquestion, sources=sources_text))
     try:
@@ -45,17 +47,34 @@ def research_one(subquestion: str) -> dict:
         except json.JSONDecodeError:
             print(f"[research_one] JSON 解析失败: {subquestion}")
             return {"subquestion": subquestion, "notes": []}
+    if not isinstance(data, dict):
+        return {"subquestion": subquestion, "notes": []}
 
     notes = []
-    for n in data.get("notes", []):
-        cite = n.get("citation", "")
-        if cite in url_map:  # 只保留能溯源到真实 URL 的笔记
-            notes.append({
-                "fact": n.get("fact", "").strip(),
-                "url": url_map[cite],
-                "source_title": title_map[cite],
-                "confidence": "medium",
-            })
+    dropped = 0
+    for n in (data.get("notes") or []):
+        if not isinstance(n, dict):
+            continue
+        # 模型有时写 S1、有时写 [S1]，统一成 S1
+        cite = str(n.get("citation", "")).strip().strip("[]").upper()
+        fact = str(n.get("fact", "")).strip()
+        if cite not in url_map or not fact:  # 只保留能溯源到真实 URL 的笔记
+            continue
+        # 抽取层接地检查：笔记里的数字必须在被引页面正文里出现。
+        # 这是挡住「页面是 A 文章、笔记却写 B 参数」的第一道闸。
+        bad = unsupported_numbers(fact, [content_map[cite]])
+        if bad:
+            dropped += 1
+            print(f"[research_one] 丢弃无法在来源中核实的数字 {bad}: {fact[:40]}")
+            continue
+        notes.append({
+            "fact": fact,
+            "url": url_map[cite],
+            "source_title": title_map[cite],
+            "confidence": "medium",
+        })
+    if dropped:
+        print(f"[research_one] {subquestion[:20]}：{dropped} 条笔记未通过来源核对")
     return {"subquestion": subquestion, "notes": notes}
 
 if __name__ == "__main__":
