@@ -1,0 +1,38 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install
+        run: |
+          python -m pip install -U pip
+          pip install -r requirements-dev.txt
+      - name: Offline tests
+        env:
+          RESEARCH_GRAPH_NO_CACHE: "1"
+          DASHSCOPE_API_KEY: test-key
+        run: python -m pytest -q
+      - name: Evaluate committed demo report
+        run: |
+          python eval_run.py demo_report.md || true
+          python - <<'PY'
+          import json, sys
+          import eval_run
+          text = open("demo_report.md", encoding="utf-8").read()
+          m = eval_run.evaluate(text, [], 0)
+          print(json.dumps(m, ensure_ascii=False, indent=2))
+          # 冲突未检出时 conflict_verified=false，不阻塞；其余硬指标必须达标
+          sys.exit(0 if m["quality_ok"] else 1)
+          PY
+      - name: Audit citations against the recorded run
+        run: python verify_report.py demo_report.md demo_state.json --out verification.md

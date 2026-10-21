@@ -16,6 +16,8 @@ from fastapi.responses import HTMLResponse, Response, StreamingResponse
 from langgraph.types import Command
 from pydantic import BaseModel
 
+import eval_run
+
 app = FastAPI(title="Research Graph")
 
 # 每个 SSE 订阅者一个独立队列，事件广播给所有订阅者。
@@ -277,14 +279,17 @@ def run_graph(topic: str, thread_id: str):
 
             state = app_graph.get_state(cfg).values
             draft = state.get("draft") or "(未生成报告)"
-            review = state.get("review_report") or {}
-            quality_ok = not review.get("blocking") and not (state.get("citation_errors") or [])
+            metrics = eval_run.evaluate(
+                draft, state.get("conflicts") or [], state.get("revision_count") or 0
+            )
+            quality_ok = bool(metrics.get("quality_ok")) and not (state.get("citation_errors") or [])
             broadcast({
                 "type": "report",
                 "ok": True,
                 "text": draft,
                 "quality": quality_ok,
                 "citation_errors": len(state.get("citation_errors") or []),
+                "metrics": metrics,
             })
         except Exception as e:
             broadcast({"type": "report", "ok": False,

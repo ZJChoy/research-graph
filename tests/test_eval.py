@@ -31,6 +31,15 @@ def test_dangling_citations_detected():
     assert eval_run.dangling_citations(text) == [3]
 
 
+def test_quality_rejects_tiny_denominator_even_at_full_coverage():
+    one_long_sentence = "芯片算力达到 100 TOPS[1]，" + "并且表现稳定，" * 40 + "值得关注。"
+    text = one_long_sentence + "\n\n## 参考来源\n\n[1] A - https://a.com/1"
+    result = eval_run.evaluate(text, [], 0)
+    assert result["citation_coverage"] == 1.0
+    assert result["fact_statements"] < eval_run.MIN_FACT_STATEMENTS
+    assert result["quality_ok"] is False
+
+
 def test_source_diversity_uses_bibliography_only():
     text = "正文提到 https://noise.com/x 但没引用。\n\n## 参考来源\n\n[1] A - https://a.com/1\n[2] B - https://b.com/2"
     assert eval_run.source_domains(text) == ["a.com", "b.com"]

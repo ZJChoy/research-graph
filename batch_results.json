@@ -1,0 +1,184 @@
+[
+  {
+    "topic": "端侧 AI 芯片格局（2025-2026）",
+    "ok": true,
+    "chars": 3346,
+    "elapsed_s": 156.7,
+    "metrics": {
+      "citation_coverage": 1.0,
+      "source_diversity": 9,
+      "source_pages": 11,
+      "conflict_handled": 1.0,
+      "conflict_total": 2,
+      "conflict_verified": true,
+      "revisions": 2,
+      "total_citations": 28,
+      "fact_statements": 22,
+      "dangling_citations": [],
+      "targets_met": true,
+      "quality_ok": true
+    },
+    "blocking": false,
+    "citation_errors": 0,
+    "cleanup": {
+      "autocited": 1,
+      "stripped": 0,
+      "marked": 1
+    },
+    "source_quality": {
+      "total_sources": 11,
+      "tiers": {
+        "blog": 5,
+        "unknown": 6
+      },
+      "corroborated": 0,
+      "single_source": 11
+    }
+  },
+  {
+    "topic": "RISC-V 在数据中心服务器的落地进展",
+    "ok": true,
+    "chars": 3559,
+    "elapsed_s": 171.1,
+    "metrics": {
+      "citation_coverage": 1.0,
+      "source_diversity": 8,
+      "source_pages": 9,
+      "conflict_handled": 1.0,
+      "conflict_total": 3,
+      "conflict_verified": true,
+      "revisions": 2,
+      "total_citations": 19,
+      "fact_statements": 18,
+      "dangling_citations": [],
+      "targets_met": true,
+      "quality_ok": true
+    },
+    "blocking": false,
+    "citation_errors": 0,
+    "cleanup": {
+      "autocited": 1,
+      "stripped": 4,
+      "marked": 1
+    },
+    "source_quality": {
+      "total_sources": 12,
+      "tiers": {
+        "media": 1,
+        "unknown": 5,
+        "blog": 6
+      },
+      "corroborated": 4,
+      "single_source": 8
+    }
+  },
+  {
+    "topic": "固态电池量产进度与产业链",
+    "ok": true,
+    "chars": 3386,
+    "elapsed_s": 151.2,
+    "metrics": {
+      "citation_coverage": 1.0,
+      "source_diversity": 7,
+      "source_pages": 10,
+      "conflict_handled": 1.0,
+      "conflict_total": 4,
+      "conflict_verified": true,
+      "revisions": 2,
+      "total_citations": 33,
+      "fact_statements": 24,
+      "dangling_citations": [],
+      "targets_met": true,
+      "quality_ok": true
+    },
+    "blocking": false,
+    "citation_errors": 0,
+    "cleanup": {
+      "autocited": 0,
+      "stripped": 1,
+      "marked": 2
+    },
+    "source_quality": {
+      "total_sources": 11,
+      "tiers": {
+        "unknown": 4,
+        "blog": 4,
+        "media": 3
+      },
+      "corroborated": 4,
+      "single_source": 7
+    }
+  },
+  {
+    "topic": "AI 编程助手对软件工程流程的影响",
+    "ok": true,
+    "chars": 3937,
+    "elapsed_s": 129.5,
+    "metrics": {
+      "citation_coverage": 1.0,
+      "source_diversity": 9,
+      "source_pages": 14,
+      "conflict_handled": 1.0,
+      "conflict_total": 1,
+      "conflict_verified": true,
+      "revisions": 2,
+      "total_citations": 33,
+      "fact_statements": 32,
+      "dangling_citations": [],
+      "targets_met": true,
+      "quality_ok": true
+    },
+    "blocking": false,
+    "citation_errors": 0,
+    "cleanup": {
+      "autocited": 0,
+      "stripped": 2,
+      "marked": 6
+    },
+    "source_quality": {
+      "total_sources": 14,
+      "tiers": {
+        "blog": 10,
+        "unknown": 4
+      },
+      "corroborated": 0,
+      "single_source": 14
+    }
+  },
+  {
+    "topic": "人形机器人关节模组的成本结构",
+    "ok": true,
+    "chars": 2868,
+    "elapsed_s": 143.3,
+    "metrics": {
+      "citation_coverage": 1.0,
+      "source_diversity": 3,
+      "source_pages": 7,
+      "conflict_handled": 1.0,
+      "conflict_total": 3,
+      "conflict_verified": true,
+      "revisions": 2,
+      "total_citations": 24,
+      "fact_statements": 19,
+      "dangling_citations": [],
+      "targets_met": true,
+      "quality_ok": true
+    },
+    "blocking": false,
+    "citation_errors": 0,
+    "cleanup": {
+      "autocited": 0,
+      "stripped": 4,
+      "marked": 2
+    },
+    "source_quality": {
+      "total_sources": 8,
+      "tiers": {
+        "blog": 5,
+        "unknown": 3
+      },
+      "corroborated": 2,
+      "single_source": 6
+    }
+  }
+]

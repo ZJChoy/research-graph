@@ -4,6 +4,8 @@
 LLM 只做'抽取'不做'创作'：笔记里的事实必须能在正文里找到。
 """
 import json
+
+import source_quality
 from grounding import unsupported_numbers
 from llm import get_llm
 from search import retrieve
@@ -67,11 +69,14 @@ def research_one(subquestion: str, topic: str | None = None) -> dict:
             dropped += 1
             print(f"[research_one] 丢弃无法在来源中核实的数字 {bad}: {fact[:40]}")
             continue
+        url = url_map[cite]
         notes.append({
             "fact": fact,
-            "url": url_map[cite],
+            "url": url,
             "source_title": title_map[cite],
             "confidence": "medium",
+            "tier": source_quality.tier(url),
+            "published": source_quality.published_year(content_map[cite]),
         })
     if dropped:
         print(f"[research_one] {subquestion[:20]}：{dropped} 条笔记未通过来源核对")

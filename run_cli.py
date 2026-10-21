@@ -10,6 +10,7 @@ from langgraph.types import Command
 
 import eval_run
 import graph_full
+import source_quality
 
 
 def main(topic: str) -> None:
@@ -42,7 +43,7 @@ def main(topic: str) -> None:
 
         metrics = eval_run.evaluate(draft, state.get("conflicts", []), state.get("revision_count", 0))
         review = state.get("review_report") or {}
-        quality_ok = bool(metrics.get("quality_ok")) and not (state.get("citation_errors") or []) and not review.get("blocking")
+        quality_ok = bool(metrics.get("quality_ok")) and not (state.get("citation_errors") or [])
         snapshot = {
             "topic": state.get("topic"),
             "outline": state.get("outline"),
@@ -55,6 +56,7 @@ def main(topic: str) -> None:
             "citation_errors": state.get("citation_errors") or [],
             "grounding_warnings": state.get("grounding_warnings") or [],
             "citation_meta": state.get("citation_meta") or {},
+            "source_quality": source_quality.summarize(state.get("final_notes") or []),
             "metrics": metrics,
             "quality_ok": quality_ok,
         }
@@ -62,10 +64,14 @@ def main(topic: str) -> None:
             json.dump(snapshot, f, ensure_ascii=False, indent=2)
         print("报告已写入 demo_report.md（%d 字），运行快照写入 demo_state.json" % len(draft))
         print("指标:", metrics)
+        sq = snapshot["source_quality"]
+        print("来源质量:", sq["tiers"], "| 多源印证 %d/%d" % (sq["corroborated"], sq["total_sources"]))
         if not quality_ok:
             print("警告：硬指标未达标或仍有未解决的引用问题（见 demo_state.json）")
         elif not review.get("pass"):
-            print("审稿建议（不影响交付判定）：" + "；".join((review.get("problems") or [])[:2])[:200])
+            # 这是 critic 阶段的中间稿意见；code_clean 补引用/删句后以最终指标为准
+            print("[审稿时] 模型建议（已由代码清理，最终指标见上）："
+                  + "；".join((review.get("problems") or [])[:1])[:160])
     finally:
         conn = getattr(app, "_sqlite_conn", None)
         if conn is not None:

@@ -108,6 +108,10 @@ def duplicate_url_indices(text: str) -> dict:
     return {u: ids for u, ids in by_url.items() if len(ids) > 1}
 
 
+# 报告至少要有这么多事实句，覆盖率才被当作有效证据
+MIN_FACT_STATEMENTS = 12
+
+
 def evaluate(report_text: str, conflicts: list, revisions: int) -> dict:
     conflict_rate = conflict_handled_rate(report_text, conflicts)
     dangling = dangling_citations(report_text)
@@ -131,9 +135,11 @@ def evaluate(report_text: str, conflicts: list, revisions: int) -> dict:
         and result["conflict_handled"] >= 1.0
         and not dangling
     )
-    # 交付判定：代码可数的硬指标；冲突未检出时如实标「未验证」，不阻塞交付
+    # 交付判定：代码可数的硬指标；冲突未检出时如实标「未验证」，不阻塞交付。
+    # 分母下限：事实句太少时，1.0 的覆盖率没有统计意义，不能算交付达标。
     result["quality_ok"] = (
         len(report_text) >= 300
+        and result["fact_statements"] >= MIN_FACT_STATEMENTS
         and result["citation_coverage"] >= 0.9
         and not dangling
         and (not result["conflict_verified"] or result["conflict_handled"] >= 1.0)

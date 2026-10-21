@@ -9,3 +9,4 @@ __pycache__/
 checkpoints/
 .cache/
 .pytest_tmp/
+.batch_run/

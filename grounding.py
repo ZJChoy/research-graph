@@ -129,6 +129,41 @@ def cited_in(sentence: str) -> list:
     return sorted({int(m) for m in re.findall(r"\[(\d{1,2})\]", sentence)})
 
 
+def autocite(draft: str, notes: list) -> tuple[str, int]:
+    """给「有硬 token、但漏了引用」的句子补编号。
+
+    只在恰好一条笔记的 fact 能覆盖该句全部数字/型号时补；
+    多条命中说明有歧义，宁可留空交给覆盖率检查，也不猜。
+    """
+    body, _ = split_bibliography(draft)
+    appendix = ""
+    cut = body.find("\n## 数据分歧说明")
+    if cut >= 0:
+        body, appendix = body[:cut], body[cut:]
+    out_lines, added = [], 0
+    for line in body.splitlines():
+        s = line.strip()
+        if not s or s.startswith("#") or s.startswith("|") or re.match(r"^\[\d+\]", s):
+            out_lines.append(line)
+            continue
+        kept = []
+        for part in re.split(r"(?<=[。！？；])", line):
+            if cited_in(part) or len(part.strip()) < 12 or not critical_tokens(part, []):
+                kept.append(part)
+                continue
+            candidates = [
+                i + 1 for i, n in enumerate(notes)
+                if not critical_tokens(part, [str(n.get("fact", ""))])
+            ]
+            m = re.search(r"([。！？；])$", part)
+            if len(candidates) == 1 and m:
+                part = part[:m.start()] + f"[{candidates[0]}]" + part[m.start():]
+                added += 1
+            kept.append(part)
+        out_lines.append("".join(kept))
+    return ("\n".join(out_lines).strip() + appendix), added
+
+
 def strip_unsupported(draft: str, notes: list) -> tuple[str, int]:
     """删掉「数字/型号在被引笔记里找不到」的句子。
 
@@ -141,7 +176,6 @@ def strip_unsupported(draft: str, notes: list) -> tuple[str, int]:
     cut = body.find("\n## 数据分歧说明")
     if cut >= 0:
         body, appendix = body[:cut], body[cut:]
-    all_supports = [str(n.get("fact", "")) for n in notes]
     out_lines, removed = [], 0
     for line in body.splitlines():
         s = line.strip()
@@ -151,7 +185,12 @@ def strip_unsupported(draft: str, notes: list) -> tuple[str, int]:
         kept = []
         for part in re.split(r"(?<=[。！？；])", line):
             cites = [i for i in cited_in(part) if 1 <= i <= len(notes)]
-            supports = [str(notes[i - 1].get("fact", "")) for i in cites] if cites else all_supports
+            if cites:
+                supports = [str(notes[i - 1].get("fact", "")) for i in cites]
+            else:
+                # 无引用但携带数字/型号：autocite 已经处理了唯一命中的情况，
+                # 剩下的要么多处歧义、要么根本无出处——都不该作为事实断言交付
+                supports = []
             if critical_tokens(part, supports):
                 removed += 1
                 continue
@@ -159,6 +198,40 @@ def strip_unsupported(draft: str, notes: list) -> tuple[str, int]:
         if kept:
             out_lines.append("".join(kept))
     return ("\n".join(out_lines).strip() + appendix), removed
+
+
+_INFERENCE_MARK = re.compile(r"（推断）|\(推断\)|推断|未披露|待补充|公开资料有限")
+
+
+def mark_inferences(draft: str) -> tuple[str, int]:
+    """给无引用、也无硬数字的分析句标「（推断）」。
+
+    这是 writer prompt 原本就要求的写法，只是模型经常漏标；
+    评测口径里标了「推断」的句子不计入引用覆盖率分母。
+    """
+    body, _ = split_bibliography(draft)
+    appendix = ""
+    cut = body.find("\n## 数据分歧说明")
+    if cut >= 0:
+        body, appendix = body[:cut], body[cut:]
+    out_lines, marked = [], 0
+    for line in body.splitlines():
+        s = line.strip()
+        if not s or s.startswith("#") or s.startswith("|") or re.match(r"^\[\d+\]", s):
+            out_lines.append(line)
+            continue
+        kept = []
+        for part in re.split(r"(?<=[。！？；])", line):
+            if (len(part.strip()) >= 12 and not cited_in(part)
+                    and not critical_tokens(part, [])
+                    and not _INFERENCE_MARK.search(part)):
+                m = re.search(r"([。！？；])$", part)
+                if m:
+                    part = part[:m.start()] + "（推断）" + part[m.start():]
+                    marked += 1
+            kept.append(part)
+        out_lines.append("".join(kept))
+    return ("\n".join(out_lines).strip() + appendix), marked
 
 
 def audit_draft(draft: str, notes: list, bigram_min: float = 0.2) -> tuple[list, list]:

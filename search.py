@@ -155,13 +155,39 @@ def query_variants(s: str) -> list:
     return uniq
 
 
+# 主题里的通用词：它们不能构成「主题锚点」，否则任何页面都能命中
+_GENERIC = {
+    "ai", "影响", "分析", "研究", "进展", "现状", "趋势", "格局", "发展",
+    "技术", "产业", "行业", "市场", "应用", "方案", "问题", "挑战", "前景",
+}
+
+
+def topic_anchor(topic: str, max_len: int = 14) -> str:
+    """从主题里抽「够特别」的锚点词组。
+
+    直接截前 10 个字会得到「AI」这种两字锚点，二元词组只有 "ai"，
+    跑题页面几乎都能命中；这里保留有区分度的词组，至少两个词。
+    """
+    parts = [p for p in _QUERY_PUNCT.sub(" ", topic or "").split() if p]
+    kept = [p for p in parts if len(p) >= 2 and p.lower() not in _GENERIC]
+    if len(kept) >= 2:
+        out = ""
+        for p in kept:
+            if out and len(out) + len(p) + 1 > max_len:
+                break
+            out = f"{out} {p}".strip()
+        return out
+    # 拆不开（整句没有空格）时退回原串，至少保留完整语义
+    return (to_query(topic, max_len) if not kept else kept[0])
+
+
 def build_queries(topic: str, subquestion: str) -> list:
     """主题锚点 + 子问题关键词的组合查询。
 
     只用子问题搜，会搜回「产品路线图工具」「供应链」这类跑题页；
     只用主题搜，5 路子问题又全变成同一个查询。所以两者都要带上。
     """
-    anchor = to_query(topic, 10)
+    anchor = topic_anchor(topic)
     sub = to_query(subquestion, 14)
     outs = []
     # 先搜子问题本身（保证各路来源不重叠），再搜组合，最后才退回主题
@@ -186,7 +212,7 @@ def retrieve(query: str, topic: str | None = None) -> list[dict]:
     由上游写「公开资料有限，待补充」。宁缺勿滥——跑题页面进笔记，
     最后就是一份每句都有引用、却没有一句站得住的报告。
     """
-    anchor = to_query(topic, 10) if topic else to_query(query, 10)
+    anchor = topic_anchor(topic) if topic else to_query(query, 10)
     queries = build_queries(topic, query) if topic else query_variants(query)
 
     seen_urls = set()

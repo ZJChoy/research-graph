@@ -5,8 +5,6 @@
 import json
 import re
 
-from langgraph.graph import END
-
 from eval_run import citation_coverage, factual_sentences
 from llm import get_llm
 
@@ -112,13 +110,17 @@ def critic(state: dict) -> dict:
 
 
 def route_after_critic(state: dict) -> str:
-    """硬问题（代码可判）返工到预算用尽；模型意见最多触发一轮返工。"""
+    """硬问题（代码可判）返工到预算用尽；模型意见最多触发一轮返工。
+
+    结束时进 code_clean 而不是直接 END：最后一版若仍有无出处句子，
+    由代码删掉再交付。
+    """
     report = state.get("review_report", {})
     revision = state.get("revision_count", 0)
     if revision >= 2:
-        return END
+        return "clean"
     if report.get("blocking"):
         return "revise"
     if not report.get("pass") and revision <= 1:
         return "revise"
-    return END
+    return "clean"

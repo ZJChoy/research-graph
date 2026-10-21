@@ -1,45 +1,41 @@
 {
   "topic": "端侧 AI 芯片格局（2025-2026）",
-  "outline": "## 一、主流厂商产品路线图与技术参数对比  \n梳理2025–2026年已发布及量产在即的端侧AI芯片（含NPU IP、SoC、专用加速器）的关键指标：算力（INT4/FP16 TOPS）、能效比（TOPS/W）、内存带宽/容量、支持模型规模（参数量/上下文长度）、编译器成熟度与框架兼容性。\n\n## 二、终端应用场景落地进展与需求分化  \n调研智能手机、PC、AR/VR、智能汽车座舱、边缘IoT设备等核心场景中，端侧AI芯片的实际部署率、典型用例（如实时多模态推理、本地大模型运行、隐私敏感任务），及其对低延迟、小尺寸、热设计功耗（TDP）和成本的差异化要求。\n\n## 三、生态壁垒与软件栈竞争格局  \n分析主要芯片厂商（如高通、联发科、华为、苹果、寒武纪、爱芯元智等）在工具链（编译器、量化工具、调试器）、模型库、开发者社区、预训练模型适配支持等方面的投入强度与开放程度，评估生态锁定风险与跨平台迁移成本。\n\n## 四、供应链安全与地缘政策影响  \n考察先进封装（如Chiplet）、关键IP授权（ARM/NPU架构）、代工产能（台积电/中芯国际制程节点）、以及中美欧出口管制、国产替代政策对2025–2026年端侧AI芯片研发节奏、量产交付与市场准入的实际制约与应对策略。\n\n## 五、新兴技术突破与潜在颠覆点  \n追踪存算一体、光子计算、类脑芯片等前沿架构在端侧的工程化进展；评估其2025–2026年是否具备原型验证或小批量导入条件，并研判其对传统NPU架构的长期替代潜力与商业化窗口。",
+  "outline": "## 一、主流厂商产品路线图与技术参数对比  \n梳理2025–2026年已发布及量产在即的端侧AI芯片（含NPU IP、SoC、专用加速器）的关键指标：算力（INT4/FP16 TOPS）、能效比（TOPS/W）、内存带宽/容量、支持模型规模（参数量/上下文长度）、编译器成熟度与框架兼容性。\n\n## 二、终端应用场景落地进展与需求分化  \n调研智能手机、PC、AR/VR、智能汽车座舱、可穿戴设备、边缘IoT等细分场景中，端侧AI芯片的实际部署率、典型用例（如实时语音翻译、本地多模态生成、ADAS感知推理）、对延迟/功耗/隐私的核心诉求差异。\n\n## 三、生态壁垒与软件栈竞争格局  \n分析主要芯片厂商（华为昇腾、高通、联发科、苹果、寒武纪、壁仞等）在工具链（编译器、量化工具、调试器）、运行时（Runtime）、模型库、开发者社区及跨平台适配能力方面的建设进度与互操作性瓶颈。\n\n## 四、供应链安全与地缘政策影响  \n评估中美技术管制（如EDA工具、先进制程代工、IP授权）对端侧AI芯片设计、流片、封装测试环节的实际制约，以及中国本土代工（中芯国际、长电科技）与RISC-V生态替代路径的成熟度。\n\n## 五、新兴技术突破与潜在颠覆点  \n追踪2025–2026年可能商用的前沿方向：存内计算（PIM）架构落地进展、光子AI芯片原型验证、类脑芯片低功耗推理表现、Chiplet异构集成在端侧的可行性，及其对现有能效天花板的突破潜力。",
   "research_notes": [
     {
       "subquestion": "主流厂商产品路线图与技术参数对比",
       "notes": [
         {
-          "fact": "2026-2030年端侧生成式AI芯片报告指出，到2028年旗舰移动SoC的NPU算力将普遍突破100TOPS [S1]",
-          "url": "https://max.book118.com/html/2026/0918/7116001061011153.shtm",
-          "source_title": "2026-2030年端侧生成式AI芯片（NPU GPU）市场竞争格局及技术路线图.docx-原创力文档",
-          "confidence": "medium"
-        },
-        {
           "fact": "Apple在2026年推出的M4 Ultra神经网络引擎达到38 TOPS，A19 Pro芯片在移动端实现30 TOPS推理能力 [S2]",
           "url": "https://guijiagi.com/posts/edge-ai-chip-landscape-2026/",
-          "source_title": "2026年端侧ai芯片格局：谁在领跑？ | Ai 实战派 · 从技术到赚钱",
-          "confidence": "medium"
+          "source_title": "2026年端侧AI芯片格局：谁在领跑？ | AI 实战派 · 从技术到赚钱",
+          "confidence": "medium",
+          "tier": "blog",
+          "published": null
         },
         {
           "fact": "高通2026年推出的骁龙X Elite Gen 3 NPU算力为45 TOPS，支持100B参数模型本地推理 [S2]",
           "url": "https://guijiagi.com/posts/edge-ai-chip-landscape-2026/",
-          "source_title": "2026年端侧ai芯片格局：谁在领跑？ | Ai 实战派 · 从技术到赚钱",
-          "confidence": "medium"
+          "source_title": "2026年端侧AI芯片格局：谁在领跑？ | AI 实战派 · 从技术到赚钱",
+          "confidence": "medium",
+          "tier": "blog",
+          "published": null
         },
         {
-          "fact": "中星微技术2025年发布了‘星光智能五号’芯片，是我国首枚全自主可控、可单芯片同时运行通用语言大模型和多模态大模型的嵌入式端侧人工智能芯片 [S3]",
-          "url": "https://www.eet-china.com/mp/a496467.html",
-          "source_title": "从端侧推理到算力中心：2026国产端侧AI芯片排行榜揭示行业新格局",
-          "confidence": "medium"
-        },
-        {
-          "fact": "中星微技术2026年4月在第九届数字中国建设峰会上基于‘星光智能五号’发布了‘星元智能’ [S3]",
-          "url": "https://www.eet-china.com/mp/a496467.html",
-          "source_title": "从端侧推理到算力中心：2026国产端侧AI芯片排行榜揭示行业新格局",
-          "confidence": "medium"
-        },
-        {
-          "fact": "联发科天玑9400+在2026年定位中高端市场，以更具竞争力的价格提供接近旗舰的AI能力 [S2]",
+          "fact": "华为麒麟9010系列在2026年AI推理能力达到国际主流水平 [S2]",
           "url": "https://guijiagi.com/posts/edge-ai-chip-landscape-2026/",
-          "source_title": "2026年端侧ai芯片格局：谁在领跑？ | Ai 实战派 · 从技术到赚钱",
-          "confidence": "medium"
+          "source_title": "2026年端侧AI芯片格局：谁在领跑？ | AI 实战派 · 从技术到赚钱",
+          "confidence": "medium",
+          "tier": "blog",
+          "published": null
+        },
+        {
+          "fact": "端侧AI芯片选型需关注的四个关键指标按优先级排序为：算力（TOPS）、功耗（mW或W）、内存带宽、工具链成熟度 [S1]",
+          "url": "https://blog.csdn.net/weixin_29171087/article/details/166283587",
+          "source_title": "端侧AI芯片选型指南：10家核心企业技术路线与落地实践-CSDN博客",
+          "confidence": "medium",
+          "tier": "blog",
+          "published": null
         }
       ]
     },
@@ -47,40 +43,52 @@
       "subquestion": "终端应用场景落地进展与需求分化",
       "notes": [
         {
-          "fact": "2023年国内端侧AI整体市场规模达1939亿元，其中端侧大模型细分市场为8亿元 [S1]",
+          "fact": "2023年端侧AI整体市场规模达1939亿元，其中端侧大模型细分市场为8亿元 [S2]",
           "url": "https://www.sohu.com/a/1032421269_121970615",
-          "source_title": "中国端侧AI场景应用分析：智能终端与边缘计算的融合创新-头豹",
-          "confidence": "medium"
+          "source_title": "中国端侧AI场景应用分析：智能终端与边缘计算的融合创新-头豹_行业_芯...",
+          "confidence": "medium",
+          "tier": "blog",
+          "published": 2018
         },
         {
-          "fact": "机构预测2028年国内端侧AI全行业规模将升至19071亿元，端侧大模型增至79亿元 [S1]",
+          "fact": "机构预测2028年端侧AI全行业规模将升至19071亿元，端侧大模型增至79亿元 [S2]",
           "url": "https://www.sohu.com/a/1032421269_121970615",
-          "source_title": "中国端侧AI场景应用分析：智能终端与边缘计算的融合创新-头豹",
-          "confidence": "medium"
+          "source_title": "中国端侧AI场景应用分析：智能终端与边缘计算的融合创新-头豹_行业_芯...",
+          "confidence": "medium",
+          "tier": "blog",
+          "published": 2018
         },
         {
-          "fact": "2026年国内生成式AI手机渗透率突破50% [S3]",
-          "url": "https://www.idc.com/resource-center/blog/waic-智能终端产业质变已至：现场实景和idc数据告诉我/",
-          "source_title": "WAIC 智能终端产业质变已至：现场实景和IDC数据告诉我们什么？",
-          "confidence": "medium"
+          "fact": "2027年AI PC预计占整机市场84.6%，AI手机份额预计达51.9% [S2]",
+          "url": "https://www.sohu.com/a/1032421269_121970615",
+          "source_title": "中国端侧AI场景应用分析：智能终端与边缘计算的融合创新-头豹_行业_芯...",
+          "confidence": "medium",
+          "tier": "blog",
+          "published": 2018
         },
         {
-          "fact": "2026年中国Gen AI PC出货587万台，市场占比11.9%，销量同比提升166.4% [S3]",
-          "url": "https://www.idc.com/resource-center/blog/waic-智能终端产业质变已至：现场实景和idc数据告诉我/",
-          "source_title": "WAIC 智能终端产业质变已至：现场实景和IDC数据告诉我们什么？",
-          "confidence": "medium"
+          "fact": "2026年全球AI PC出货量预计达1.43亿台 [S3]",
+          "url": "https://www.sohu.com/a/989525342_121999993",
+          "source_title": "电子行业深度报告：2026年端侧AI产业深度，应用迭代驱动终端重构，见...",
+          "confidence": "medium",
+          "tier": "blog",
+          "published": null
         },
         {
-          "fact": "2026年第一季度全球家用大清洁机器人出货893万台，同比增长36.7% [S3]",
-          "url": "https://www.idc.com/resource-center/blog/waic-智能终端产业质变已至：现场实景和idc数据告诉我/",
-          "source_title": "WAIC 智能终端产业质变已至：现场实景和IDC数据告诉我们什么？",
-          "confidence": "medium"
+          "fact": "2026年中国人形机器人销量预计翻倍至2.8万台 [S3]",
+          "url": "https://www.sohu.com/a/989525342_121999993",
+          "source_title": "电子行业深度报告：2026年端侧AI产业深度，应用迭代驱动终端重构，见...",
+          "confidence": "medium",
+          "tier": "blog",
+          "published": null
         },
         {
-          "fact": "2026年WAIC现场首发全球首款AI智能体手机和23克轻量化AI眼镜 [S3]",
-          "url": "https://www.idc.com/resource-center/blog/waic-智能终端产业质变已至：现场实景和idc数据告诉我/",
-          "source_title": "WAIC 智能终端产业质变已至：现场实景和IDC数据告诉我们什么？",
-          "confidence": "medium"
+          "fact": "2025年初以来，用户端对智能化的需求持续爆发，形成围绕AI手机和AI PC的‘智慧生活模型’ [S1]",
+          "url": "https://www.questmobile.cn/research/report/1993213148656668673/",
+          "source_title": "QuestMobile2025年中国AI终端生态发展研究报告：AI终端三大领域格局初...",
+          "confidence": "medium",
+          "tier": "unknown",
+          "published": 2026
         }
       ]
     },
@@ -91,31 +99,49 @@
           "fact": "2026年全球AI芯片市场规模据Mercury Research估算已突破1580亿美元，而2023年还不到400亿美元。",
           "url": "https://www.ai-nav-build.com/blog-ai-chips-war-2026.html",
           "source_title": "AI芯片战争2026：NVIDIA、AMD、华为昇腾、Google TPU的竞争格局与技术路线 | 星枢 AI",
-          "confidence": "medium"
+          "confidence": "medium",
+          "tier": "unknown",
+          "published": 2024
         },
         {
-          "fact": "NVIDIA Blackwell架构旗舰产品B200集成了2080亿个晶体管，采用台积电4NP工艺，FP8算力高达10 PFLOPS，较Hopper架构H100提升近5倍。",
+          "fact": "NVIDIA B200芯片采用台积电4NP工艺，集成2080亿个晶体管，FP8算力高达10 PFLOPS，较Hopper架构H100提升近5倍。",
           "url": "https://www.ai-nav-build.com/blog-ai-chips-war-2026.html",
           "source_title": "AI芯片战争2026：NVIDIA、AMD、华为昇腾、Google TPU的竞争格局与技术路线 | 星枢 AI",
-          "confidence": "medium"
+          "confidence": "medium",
+          "tier": "unknown",
+          "published": 2024
         },
         {
           "fact": "NVIDIA FY2026 Q2财报显示其数据中心业务营收达362亿美元，同比增长143%，其中AI训练和推理相关收入占比超过80%。",
           "url": "https://www.ai-nav-build.com/blog-ai-chips-war-2026.html",
           "source_title": "AI芯片战争2026：NVIDIA、AMD、华为昇腾、Google TPU的竞争格局与技术路线 | 星枢 AI",
-          "confidence": "medium"
+          "confidence": "medium",
+          "tier": "unknown",
+          "published": 2024
         },
         {
-          "fact": "AMD MI400采用3nm制程，晶体管数量超过2500亿，FP16算力达到6.5 PFLOPS。",
+          "fact": "CUDA生态拥有超过400万注册开发者、数千个优化的库和框架。",
           "url": "https://www.ai-nav-build.com/blog-ai-chips-war-2026.html",
           "source_title": "AI芯片战争2026：NVIDIA、AMD、华为昇腾、Google TPU的竞争格局与技术路线 | 星枢 AI",
-          "confidence": "medium"
+          "confidence": "medium",
+          "tier": "unknown",
+          "published": 2024
         },
         {
-          "fact": "英伟达于2020年以约69亿美元收购网络设备厂商Mellanox。",
-          "url": "https://www.kongchang.com/articles/ying-wei-da-aihu-cheng-he-cong-gpuzhuan-xiang-xi-tong-ji-you-shi",
-          "source_title": "英伟达ai护城河解析：从gpu芯片到系统级生态优势 - 控场ai",
-          "confidence": "medium"
+          "fact": "AMD MI400芯片采用3nm制程，晶体管数量超过2500亿，FP16算力达6.5 PFLOPS。",
+          "url": "https://www.ai-nav-build.com/blog-ai-chips-war-2026.html",
+          "source_title": "AI芯片战争2026：NVIDIA、AMD、华为昇腾、Google TPU的竞争格局与技术路线 | 星枢 AI",
+          "confidence": "medium",
+          "tier": "unknown",
+          "published": 2024
+        },
+        {
+          "fact": "瑞芯微RK182X芯片支持7B参数级端侧大模型，帮助相关企业实现60%以上营业收入增长。",
+          "url": "https://www.cet.com.cn/wzsy/kjzx/10468829.shtml",
+          "source_title": "2026国内端侧AI企业竞争格局拆解：全栈壁垒决胜差异化赛道",
+          "confidence": "medium",
+          "tier": "unknown",
+          "published": null
         }
       ]
     },
@@ -123,40 +149,52 @@
       "subquestion": "供应链安全与地缘政策影响",
       "notes": [
         {
-          "fact": "2025年全球端侧AI市场规模突破420亿美元，相较2024年的285亿美元实现约47%的同比增长。",
-          "url": "https://www.iim.net.cn/75/view-274816-1.html",
-          "source_title": "全球及中国端侧ai行业技术与市场发展研究报告（2026 Iimv9c9x9j1）",
-          "confidence": "medium"
+          "fact": "预计到2028年全球端侧AI硬件市场规模将突破3000亿美元，年复合增长率超20%。",
+          "url": "https://max.book118.com/html/2026/0810/8071022075010116.shtm",
+          "source_title": "端侧AI硬件供应链本土化与地缘政治影响：核心算力芯片与先进封装产能...",
+          "confidence": "medium",
+          "tier": "blog",
+          "published": 2026
         },
         {
-          "fact": "2025年端侧AI芯片出货量达到38.7亿颗，其中智能手机端侧AI芯片渗透率超过65%，AI PC渗透率突破40%，智能可穿戴设备搭载端侧AI模组的比例达52%。",
-          "url": "https://www.iim.net.cn/75/view-274816-1.html",
-          "source_title": "全球及中国端侧ai行业技术与市场发展研究报告（2026 Iimv9c9x9j1）",
-          "confidence": "medium"
+          "fact": "先进封装产能本土化率在部分区域将提升至40%以上。",
+          "url": "https://max.book118.com/html/2026/0810/8071022075010116.shtm",
+          "source_title": "端侧AI硬件供应链本土化与地缘政治影响：核心算力芯片与先进封装产能...",
+          "confidence": "medium",
+          "tier": "blog",
+          "published": 2026
         },
         {
-          "fact": "2025年全球端侧AI芯片及模组贸易总额达210亿美元，中国净进口额约45亿美元。",
-          "url": "https://www.iim.net.cn/75/view-274816-1.html",
-          "source_title": "全球及中国端侧ai行业技术与市场发展研究报告（2026 Iimv9c9x9j1）",
-          "confidence": "medium"
+          "fact": "28nm以上芯片国产化率超70%，车规级MCU、电源管理芯片等实现全链替代。",
+          "url": "https://news.sina.cn/bignews/insight/2026-05-12/detail-inhxrwqh9865418.d.html?vt=4",
+          "source_title": "当盟友企业沦为地缘博弈牺牲品，全球芯片供应链的重组将如何重塑科技...",
+          "confidence": "medium",
+          "tier": "unknown",
+          "published": null
         },
         {
-          "fact": "2025年国产端侧AI芯片自给率升至22%，较2024年提高6个百分点。",
-          "url": "https://www.iim.net.cn/75/view-274816-1.html",
-          "source_title": "全球及中国端侧ai行业技术与市场发展研究报告（2026 Iimv9c9x9j1）",
-          "confidence": "medium"
+          "fact": "美国对华封锁导致美企承受28%成本上升，芯片涨价周期中消费电子厂商利润被挤压（如苹果Mac mini提价33%）。",
+          "url": "https://news.sina.cn/bignews/insight/2026-05-12/detail-inhxrwqh9865418.d.html?vt=4",
+          "source_title": "当盟友企业沦为地缘博弈牺牲品，全球芯片供应链的重组将如何重塑科技...",
+          "confidence": "medium",
+          "tier": "unknown",
+          "published": null
         },
         {
-          "fact": "2026年全球AI PC出货量预计达1.43亿台。",
-          "url": "https://www.sohu.com/a/989525342_121999993",
-          "source_title": "电子行业深度报告：2026年端侧AI产业深度，应用迭代驱动终端重构，见证端侧SoC芯片的价值重估与位阶提升-东吴证券",
-          "confidence": "medium"
+          "fact": "存储芯片领域三星、美光、SK海力士垄断全球95%市场。",
+          "url": "https://news.sina.cn/bignews/insight/2026-05-12/detail-inhxrwqh9865418.d.html?vt=4",
+          "source_title": "当盟友企业沦为地缘博弈牺牲品，全球芯片供应链的重组将如何重塑科技...",
+          "confidence": "medium",
+          "tier": "unknown",
+          "published": null
         },
         {
-          "fact": "2026年中国人形机器人销量预计翻倍至2.8万台。",
-          "url": "https://www.sohu.com/a/989525342_121999993",
-          "source_title": "电子行业深度报告：2026年端侧AI产业深度，应用迭代驱动终端重构，见证端侧SoC芯片的价值重估与位阶提升-东吴证券",
-          "confidence": "medium"
+          "fact": "华为昇腾算力达英伟达H20的3倍。",
+          "url": "https://news.sina.cn/bignews/insight/2026-05-12/detail-inhxrwqh9865418.d.html?vt=4",
+          "source_title": "当盟友企业沦为地缘博弈牺牲品，全球芯片供应链的重组将如何重塑科技...",
+          "confidence": "medium",
+          "tier": "unknown",
+          "published": null
         }
       ]
     },
@@ -164,125 +202,181 @@
       "subquestion": "新兴技术突破与潜在颠覆点",
       "notes": [
         {
-          "fact": "Apple在2026年推出的M4 Ultra芯片神经网络引擎算力达到38 TOPS，A19 Pro芯片在移动端实现30 TOPS的推理能力。",
-          "url": "https://guijiagi.com/posts/edge-ai-chip-landscape-2026/",
-          "source_title": "2026年端侧ai芯片格局：谁在领跑？ | Ai 实战派 · 从技术到赚钱",
-          "confidence": "medium"
+          "fact": "2025年中国AI手机出货量约1.18亿台，占智能手机大盘40.7%；预计2026年达1.47亿台，渗透率升至53.0%。",
+          "url": "https://www.sohu.com/a/1071853930_166680",
+          "source_title": "集微咨询发布《2026年端侧AI芯片行业研究报告》",
+          "confidence": "medium",
+          "tier": "blog",
+          "published": 2025
         },
         {
-          "fact": "高通2026年推出的骁龙X Elite Gen 3芯片NPU算力为45 TOPS，支持100B参数模型本地推理。",
-          "url": "https://guijiagi.com/posts/edge-ai-chip-landscape-2026/",
-          "source_title": "2026年端侧ai芯片格局：谁在领跑？ | Ai 实战派 · 从技术到赚钱",
-          "confidence": "medium"
+          "fact": "Gartner预计，2026年全球AI PC出货量将达1.43亿台、占PC总出货55%。",
+          "url": "https://www.sohu.com/a/1071853930_166680",
+          "source_title": "集微咨询发布《2026年端侧AI芯片行业研究报告》",
+          "confidence": "medium",
+          "tier": "blog",
+          "published": 2025
         },
         {
-          "fact": "联发科天玑9400+于2026年定位中高端市场，提供接近旗舰的AI能力。",
-          "url": "https://guijiagi.com/posts/edge-ai-chip-landscape-2026/",
-          "source_title": "2026年端侧ai芯片格局：谁在领跑？ | Ai 实战派 · 从技术到赚钱",
-          "confidence": "medium"
+          "fact": "IDC与Omdia对2026年全球AI眼镜出货量的预测分别为2,368.7万台与1,500万台。",
+          "url": "https://www.sohu.com/a/1071853930_166680",
+          "source_title": "集微咨询发布《2026年端侧AI芯片行业研究报告》",
+          "confidence": "medium",
+          "tier": "blog",
+          "published": 2025
         },
         {
-          "fact": "华为麒麟9010系列芯片在2026年AI推理能力达到国际主流水平。",
-          "url": "https://guijiagi.com/posts/edge-ai-chip-landscape-2026/",
-          "source_title": "2026年端侧ai芯片格局：谁在领跑？ | Ai 实战派 · 从技术到赚钱",
-          "confidence": "medium"
+          "fact": "中国乘用车城市NOA渗透率由2024年1月的7.8%持续爬升至2025年5月的22.0%。",
+          "url": "https://www.sohu.com/a/1071853930_166680",
+          "source_title": "集微咨询发布《2026年端侧AI芯片行业研究报告》",
+          "confidence": "medium",
+          "tier": "blog",
+          "published": 2025
         },
         {
-          "fact": "端侧SoC将CPU、GPU、NPU、存储器、通信接口及传感器接口集成于单一芯片，支持终端设备本地运行AI算法。",
-          "url": "https://www.sohu.com/a/991398395_121709768",
-          "source_title": "端侧AI行业产业链深度梳理（2026年）_芯片_技术_模型",
-          "confidence": "medium"
+          "fact": "新唐科技M55M1 AI MCU基于Arm Cortex-M55内核，集成Ethos-U55 NPU，在典型工作负载下可实现480 GOPS的推理性能。",
+          "url": "https://www.hengsen.cn/news/edge-ai-scale-deployment-2026",
+          "source_title": "端侧AI规模化落地元年：MCU+NPU融合如何重塑边缘智能格局",
+          "confidence": "medium",
+          "tier": "unknown",
+          "published": 2023
         },
         {
-          "fact": "端侧AI芯片在2026年普遍支持结构化稀疏推理，以提升有限算力下的大模型运行效率。",
-          "url": "https://guijiagi.com/posts/edge-ai-chip-landscape-2026/",
-          "source_title": "2026年端侧ai芯片格局：谁在领跑？ | Ai 实战派 · 从技术到赚钱",
-          "confidence": "medium"
+          "fact": "据Yole Group报告，全球边缘AI芯片市场预计从2025年的约120亿美元增长至2029年的超过350亿美元。",
+          "url": "https://www.hengsen.cn/news/edge-ai-scale-deployment-2026",
+          "source_title": "端侧AI规模化落地元年：MCU+NPU融合如何重塑边缘智能格局",
+          "confidence": "medium",
+          "tier": "unknown",
+          "published": 2023
         }
       ]
     }
   ],
   "final_notes": [
     {
-      "url": "https://max.book118.com/html/2026/0918/7116001061011153.shtm",
-      "source_title": "2026-2030年端侧生成式AI芯片（NPU GPU）市场竞争格局及技术路线图.docx-原创力文档",
-      "fact": "2026-2030年端侧生成式AI芯片报告指出，到2028年旗舰移动SoC的NPU算力将普遍突破100TOPS [S1]"
-    },
-    {
       "url": "https://guijiagi.com/posts/edge-ai-chip-landscape-2026/",
-      "source_title": "2026年端侧ai芯片格局：谁在领跑？ | Ai 实战派 · 从技术到赚钱",
-      "fact": "Apple在2026年推出的M4 Ultra神经网络引擎达到38 TOPS，A19 Pro芯片在移动端实现30 TOPS推理能力 [S2]；高通2026年推出的骁龙X Elite Gen 3 NPU算力为45 TOPS，支持100B参数模型本地推理 [S2]；联发科天玑9400+在2026年定位中高端市场，以更具竞争力的价格提供接近旗舰的AI能力 [S2]；Apple在2026年推出的M4 Ultra芯片神经网络引擎算力达到38 TOPS，A19 Pro芯片在移动端实现30 TOPS的推理能力。；高通2026年推出的骁龙X Elite Gen 3芯片NPU算力为45 TOPS，支持100B参数模型本地推理。；联发科天玑9400+于2026年定位中高端市场，提供接近旗舰的AI能力。"
+      "source_title": "2026年端侧AI芯片格局：谁在领跑？ | AI 实战派 · 从技术到赚钱",
+      "fact": "Apple在2026年推出的M4 Ultra神经网络引擎达到38 TOPS，A19 Pro芯片在移动端实现30 TOPS推理能力 [S2]；高通2026年推出的骁龙X Elite Gen 3 NPU算力为45 TOPS，支持100B参数模型本地推理 [S2]；华为麒麟9010系列在2026年AI推理能力达到国际主流水平 [S2]",
+      "tier": "blog",
+      "published": null,
+      "corroborated": false
     },
     {
-      "url": "https://www.eet-china.com/mp/a496467.html",
-      "source_title": "从端侧推理到算力中心：2026国产端侧AI芯片排行榜揭示行业新格局",
-      "fact": "中星微技术2025年发布了‘星光智能五号’芯片，是我国首枚全自主可控、可单芯片同时运行通用语言大模型和多模态大模型的嵌入式端侧人工智能芯片 [S3]；中星微技术2026年4月在第九届数字中国建设峰会上基于‘星光智能五号’发布了‘星元智能’ [S3]"
+      "url": "https://blog.csdn.net/weixin_29171087/article/details/166283587",
+      "source_title": "端侧AI芯片选型指南：10家核心企业技术路线与落地实践-CSDN博客",
+      "fact": "端侧AI芯片选型需关注的四个关键指标按优先级排序为：算力（TOPS）、功耗（mW或W）、内存带宽、工具链成熟度 [S1]",
+      "tier": "blog",
+      "published": null,
+      "corroborated": false
     },
     {
       "url": "https://www.sohu.com/a/1032421269_121970615",
-      "source_title": "中国端侧AI场景应用分析：智能终端与边缘计算的融合创新-头豹",
-      "fact": "2023年国内端侧AI整体市场规模达1939亿元，其中端侧大模型细分市场为8亿元 [S1]；机构预测2028年国内端侧AI全行业规模将升至19071亿元，端侧大模型增至79亿元 [S1]"
+      "source_title": "中国端侧AI场景应用分析：智能终端与边缘计算的融合创新-头豹_行业_芯...",
+      "fact": "2023年端侧AI整体市场规模达1939亿元，其中端侧大模型细分市场为8亿元 [S2]；机构预测2028年端侧AI全行业规模将升至19071亿元，端侧大模型增至79亿元 [S2]；2027年AI PC预计占整机市场84.6%，AI手机份额预计达51.9% [S2]",
+      "tier": "blog",
+      "published": 2018,
+      "corroborated": false
     },
     {
-      "url": "https://www.idc.com/resource-center/blog/waic-智能终端产业质变已至：现场实景和idc数据告诉我/",
-      "source_title": "WAIC 智能终端产业质变已至：现场实景和IDC数据告诉我们什么？",
-      "fact": "2026年国内生成式AI手机渗透率突破50% [S3]；2026年中国Gen AI PC出货587万台，市场占比11.9%，销量同比提升166.4% [S3]；2026年第一季度全球家用大清洁机器人出货893万台，同比增长36.7% [S3]；2026年WAIC现场首发全球首款AI智能体手机和23克轻量化AI眼镜 [S3]"
+      "url": "https://www.sohu.com/a/989525342_121999993",
+      "source_title": "电子行业深度报告：2026年端侧AI产业深度，应用迭代驱动终端重构，见...",
+      "fact": "2026年全球AI PC出货量预计达1.43亿台 [S3]；2026年中国人形机器人销量预计翻倍至2.8万台 [S3]",
+      "tier": "blog",
+      "published": null,
+      "corroborated": false
+    },
+    {
+      "url": "https://www.questmobile.cn/research/report/1993213148656668673/",
+      "source_title": "QuestMobile2025年中国AI终端生态发展研究报告：AI终端三大领域格局初...",
+      "fact": "2025年初以来，用户端对智能化的需求持续爆发，形成围绕AI手机和AI PC的‘智慧生活模型’ [S1]",
+      "tier": "unknown",
+      "published": 2026,
+      "corroborated": false
     },
     {
       "url": "https://www.ai-nav-build.com/blog-ai-chips-war-2026.html",
       "source_title": "AI芯片战争2026：NVIDIA、AMD、华为昇腾、Google TPU的竞争格局与技术路线 | 星枢 AI",
-      "fact": "2026年全球AI芯片市场规模据Mercury Research估算已突破1580亿美元，而2023年还不到400亿美元。；NVIDIA Blackwell架构旗舰产品B200集成了2080亿个晶体管，采用台积电4NP工艺，FP8算力高达10 PFLOPS，较Hopper架构H100提升近5倍。；NVIDIA FY2026 Q2财报显示其数据中心业务营收达362亿美元，同比增长143%，其中AI训练和推理相关收入占比超过80%。；AMD MI400采用3nm制程，晶体管数量超过2500亿，FP16算力达到6.5 PFLOPS。"
+      "fact": "2026年全球AI芯片市场规模据Mercury Research估算已突破1580亿美元，而2023年还不到400亿美元。；NVIDIA B200芯片采用台积电4NP工艺，集成2080亿个晶体管，FP8算力高达10 PFLOPS，较Hopper架构H100提升近5倍。；NVIDIA FY2026 Q2财报显示其数据中心业务营收达362亿美元，同比增长143%，其中AI训练和推理相关收入占比超过80%。；CUDA生态拥有超过400万注册开发者、数千个优化的库和框架。；AMD MI400芯片采用3nm制程，晶体管数量超过2500亿，FP16算力达6.5 PFLOPS。",
+      "tier": "unknown",
+      "published": 2024,
+      "corroborated": false
     },
     {
-      "url": "https://www.kongchang.com/articles/ying-wei-da-aihu-cheng-he-cong-gpuzhuan-xiang-xi-tong-ji-you-shi",
-      "source_title": "英伟达ai护城河解析：从gpu芯片到系统级生态优势 - 控场ai",
-      "fact": "英伟达于2020年以约69亿美元收购网络设备厂商Mellanox。"
+      "url": "https://www.cet.com.cn/wzsy/kjzx/10468829.shtml",
+      "source_title": "2026国内端侧AI企业竞争格局拆解：全栈壁垒决胜差异化赛道",
+      "fact": "瑞芯微RK182X芯片支持7B参数级端侧大模型，帮助相关企业实现60%以上营业收入增长。",
+      "tier": "unknown",
+      "published": null,
+      "corroborated": false
     },
     {
-      "url": "https://www.iim.net.cn/75/view-274816-1.html",
-      "source_title": "全球及中国端侧ai行业技术与市场发展研究报告（2026 Iimv9c9x9j1）",
-      "fact": "2025年全球端侧AI市场规模突破420亿美元，相较2024年的285亿美元实现约47%的同比增长。；2025年端侧AI芯片出货量达到38.7亿颗，其中智能手机端侧AI芯片渗透率超过65%，AI PC渗透率突破40%，智能可穿戴设备搭载端侧AI模组的比例达52%。；2025年全球端侧AI芯片及模组贸易总额达210亿美元，中国净进口额约45亿美元。；2025年国产端侧AI芯片自给率升至22%，较2024年提高6个百分点。"
+      "url": "https://max.book118.com/html/2026/0810/8071022075010116.shtm",
+      "source_title": "端侧AI硬件供应链本土化与地缘政治影响：核心算力芯片与先进封装产能...",
+      "fact": "预计到2028年全球端侧AI硬件市场规模将突破3000亿美元，年复合增长率超20%。；先进封装产能本土化率在部分区域将提升至40%以上。",
+      "tier": "blog",
+      "published": 2026,
+      "corroborated": false
     },
     {
-      "url": "https://www.sohu.com/a/989525342_121999993",
-      "source_title": "电子行业深度报告：2026年端侧AI产业深度，应用迭代驱动终端重构，见证端侧SoC芯片的价值重估与位阶提升-东吴证券",
-      "fact": "2026年全球AI PC出货量预计达1.43亿台。；2026年中国人形机器人销量预计翻倍至2.8万台。"
+      "url": "https://news.sina.cn/bignews/insight/2026-05-12/detail-inhxrwqh9865418.d.html?vt=4",
+      "source_title": "当盟友企业沦为地缘博弈牺牲品，全球芯片供应链的重组将如何重塑科技...",
+      "fact": "28nm以上芯片国产化率超70%，车规级MCU、电源管理芯片等实现全链替代。；美国对华封锁导致美企承受28%成本上升，芯片涨价周期中消费电子厂商利润被挤压（如苹果Mac mini提价33%）。；存储芯片领域三星、美光、SK海力士垄断全球95%市场。；华为昇腾算力达英伟达H20的3倍。",
+      "tier": "unknown",
+      "published": null,
+      "corroborated": false
     },
     {
-      "url": "https://www.sohu.com/a/991398395_121709768",
-      "source_title": "端侧AI行业产业链深度梳理（2026年）_芯片_技术_模型",
-      "fact": "端侧SoC将CPU、GPU、NPU、存储器、通信接口及传感器接口集成于单一芯片，支持终端设备本地运行AI算法。"
+      "url": "https://www.sohu.com/a/1071853930_166680",
+      "source_title": "集微咨询发布《2026年端侧AI芯片行业研究报告》",
+      "fact": "2025年中国AI手机出货量约1.18亿台，占智能手机大盘40.7%；预计2026年达1.47亿台，渗透率升至53.0%。；Gartner预计，2026年全球AI PC出货量将达1.43亿台、占PC总出货55%。；IDC与Omdia对2026年全球AI眼镜出货量的预测分别为2,368.7万台与1,500万台。；中国乘用车城市NOA渗透率由2024年1月的7.8%持续爬升至2025年5月的22.0%。",
+      "tier": "blog",
+      "published": 2025,
+      "corroborated": false
+    },
+    {
+      "url": "https://www.hengsen.cn/news/edge-ai-scale-deployment-2026",
+      "source_title": "端侧AI规模化落地元年：MCU+NPU融合如何重塑边缘智能格局",
+      "fact": "新唐科技M55M1 AI MCU基于Arm Cortex-M55内核，集成Ethos-U55 NPU，在典型工作负载下可实现480 GOPS的推理性能。；据Yole Group报告，全球边缘AI芯片市场预计从2025年的约120亿美元增长至2029年的超过350亿美元。",
+      "tier": "unknown",
+      "published": 2023,
+      "corroborated": false
     }
   ],
   "conflicts": [
     {
-      "a": "2026-2030年端侧生成式AI芯片报告指出，到2028年旗舰移动SoC的NPU算力将普遍突破100TOPS [S1]",
-      "b": "Apple在2026年推出的M4 Ultra神经网络引擎达到38 TOPS，A19 Pro芯片在移动端实现30 TOPS推理能力 [S2]",
-      "issue": "S1称2028年旗舰移动SoC将‘普遍突破100TOPS’，但S2显示2026年苹果最先进移动（A19 Pro）和桌面级（M4 Ultra）芯片NPU均远低于100TOPS（30/38 TOPS），且未提及其他厂商2026年已达100+TOPS，时间与‘普遍性’存在逻辑张力；若2026年头部厂商仍仅30–45 TOPS（如高通X Elite Gen 3为45 TOPS），则2028年‘普遍突破100TOPS’虽可能成立，但S1与S2所列2026年实际旗舰水平（最高45 TOPS）构成对‘普遍突破100TOPS’时间线合理性的间接质疑，属跨时间点的关键性能断言矛盾"
+      "a": "2026年全球AI PC出货量预计达1.43亿台 [S3]",
+      "b": "Gartner预计，2026年全球AI PC出货量将达1.43亿台、占PC总出货55%。（来源: 集微咨询发布《2026年端侧AI芯片行业研究报告》）",
+      "issue": "两处均称2026年AI PC出货量为1.43亿台，但[S3]未注明占比，而集微咨询来源明确给出‘占PC总出货55%’；该数值与另一笔记‘2027年AI PC预计占整机市场84.6% [S2]’存在趋势性矛盾——若2026年仅占55%，则2027年跃升至84.6%缺乏中间过渡支撑，且84.6%远超行业合理增速（尤其对比同期AI手机渗透率仅从40.7%→53.0%），构成隐性逻辑冲突"
     },
     {
-      "a": "2023年国内端侧AI整体市场规模达1939亿元，其中端侧大模型细分市场为8亿元 [S1]",
-      "b": "2025年全球端侧AI市场规模突破420亿美元，相较2024年的285亿美元实现约47%的同比增长。（来源: 全球及中国端侧ai行业技术与市场发展研究报告（2026 Iimv9c9x9j1））",
-      "issue": "S1给出2023年中国端侧AI市场规模1939亿元（按2023年平均汇率≈272亿美元），而孤证笔记称2025年全球市场规模达420亿美元——该值仅略高于S1推算的中国单国规模（272亿），明显违背常理（全球规模应显著大于中国单国规模），构成数量级矛盾"
+      "a": "2027年AI PC预计占整机市场84.6% [S2]",
+      "b": "Gartner预计，2026年全球AI PC出货量将达1.43亿台、占PC总出货55%。（来源: 集微咨询发布《2026年端侧AI芯片行业研究报告》）",
+      "issue": "同一指标（AI PC在PC整机市场的渗透率）在相邻年份（2026 vs 2027）出现断崖式跃升（55% → 84.6%），但无任何中间数据或技术/政策驱动依据支撑，构成时间序列上的显著矛盾"
+    },
+    {
+      "a": "华为昇腾算力达英伟达H20的3倍。（来源: 当盟友企业沦为地缘博弈牺牲品，全球芯片供应链的重组将如何重塑科技...）",
+      "b": "NVIDIA B200芯片采用台积电4NP工艺，集成2080亿个晶体管，FP8算力高达10 PFLOPS，较Hopper架构H100提升近5倍。（来源: AI芯片战争2026：NVIDIA、AMD、华为昇腾、Google TPU的竞争格局与技术路线 | 星枢 AI）",
+      "issue": "H20是NVIDIA面向中国市场的特供版，FP16算力约60 TFLOPS（公开实测值），而昇腾910B典型FP16算力约256 TFLOPS（官方白皮书），二者比值约4×，但‘昇腾算力达H20的3倍’未说明精度/场景，与B200（10 PFLOPS = 10,000 TFLOPS）的量级完全不在同一层级（B200是数据中心GPU，H20/昇腾属不同代际与定位），将端侧/边缘AI芯片语境下的‘昇腾’与数据中心级B200并列比较，存在对象错配型矛盾"
     }
   ],
   "solitary": [
-    "2026年全球AI芯片市场规模据Mercury Research估算已突破1580亿美元，而2023年还不到400亿美元。（来源: AI芯片战争2026：NVIDIA、AMD、华为昇腾、Google TPU的竞争格局与技术路线 | 星枢 AI）",
-    "NVIDIA Blackwell架构旗舰产品B200集成了2080亿个晶体管，采用台积电4NP工艺，FP8算力高达10 PFLOPS，较Hopper架构H100提升近5倍。（来源: AI芯片战争2026：NVIDIA、AMD、华为昇腾、Google TPU的竞争格局与技术路线 | 星枢 AI）",
-    "NVIDIA FY2026 Q2财报显示其数据中心业务营收达362亿美元，同比增长143%，其中AI训练和推理相关收入占比超过80%。（来源: AI芯片战争2026：NVIDIA、AMD、华为昇腾、Google TPU的竞争格局与技术路线 | 星枢 AI）",
-    "AMD MI400采用3nm制程，晶体管数量超过2500亿，FP16算力达到6.5 PFLOPS。（来源: AI芯片战争2026：NVIDIA、AMD、华为昇腾、Google TPU的竞争格局与技术路线 | 星枢 AI）",
-    "英伟达于2020年以约69亿美元收购网络设备厂商Mellanox。（来源: 英伟达ai护城河解析：从gpu芯片到系统级生态优势 - 控场ai）",
-    "2026年中国人形机器人销量预计翻倍至2.8万台。（来源: 电子行业深度报告：2026年端侧AI产业深度，应用迭代驱动终端重构，见证端侧SoC芯片的价值重估与位阶提升-东吴证券）",
-    "华为麒麟9010系列芯片在2026年AI推理能力达到国际主流水平。（来源: 2026年端侧ai芯片格局：谁在领跑？ | Ai 实战派 · 从技术到赚钱）",
-    "端侧SoC将CPU、GPU、NPU、存储器、通信接口及传感器接口集成于单一芯片，支持终端设备本地运行AI算法。（来源: 端侧AI行业产业链深度梳理（2026年）_芯片_技术_模型）",
-    "端侧AI芯片在2026年普遍支持结构化稀疏推理，以提升有限算力下的大模型运行效率。（来源: 2026年端侧ai芯片格局：谁在领跑？ | Ai 实战派 · 从技术到赚钱）"
+    "Apple在2026年推出的M4 Ultra神经网络引擎达到38 TOPS，A19 Pro芯片在移动端实现30 TOPS推理能力 [S2]",
+    "高通2026年推出的骁龙X Elite Gen 3 NPU算力为45 TOPS，支持100B参数模型本地推理 [S2]",
+    "华为麒麟9010系列在2026年AI推理能力达到国际主流水平 [S2]",
+    "2023年端侧AI整体市场规模达1939亿元，其中端侧大模型细分市场为8亿元 [S2]",
+    "机构预测2028年端侧AI全行业规模将升至19071亿元，端侧大模型增至79亿元 [S2]",
+    "2026年中国人形机器人销量预计翻倍至2.8万台 [S3]",
+    "2025年初以来，用户端对智能化的需求持续爆发，形成围绕AI手机和AI PC的‘智慧生活模型’ [S1]",
+    "瑞芯微RK182X芯片支持7B参数级端侧大模型，帮助相关企业实现60%以上营业收入增长。（来源: 2026国内端侧AI企业竞争格局拆解：全栈壁垒决胜差异化赛道）",
+    "新唐科技M55M1 AI MCU基于Arm Cortex-M55内核，集成Ethos-U55 NPU，在典型工作负载下可实现480 GOPS的推理性能。（来源: 端侧AI规模化落地元年：MCU+NPU融合如何重塑边缘智能格局）",
+    "据Yole Group报告，全球边缘AI芯片市场预计从2025年的约120亿美元增长至2029年的超过350亿美元。（来源: 端侧AI规模化落地元年：MCU+NPU融合如何重塑边缘智能格局）"
   ],
   "review_report": {
     "pass": false,
     "problems": [
-      "第一节中‘Apple在2026年推出的M4 Ultra神经网络引擎达到38 TOPS’及‘A19 Pro芯片在移动端实现30 TOPS推理能力’均未标注具体数据出处编号（如[2]仅被用于整句末尾，但该句含两个独立事实陈述：M4 Ultra算力值、A19 Pro算力值；而[2]链接文档标题为‘2026年端侧ai芯片格局：谁在领跑？’，其内容是否同时覆盖桌面级M4 Ultra与移动端A19 Pro存疑；根据引用规范，每个独立数值性事实应有明确信源支撑，当前[2]无法确认覆盖二者，属引用覆盖率不足）",
-      "第二节中‘2026年国内生成式AI手机渗透率突破50%’‘2026年中国Gen AI PC出货587万台，市场占比11.9%’‘2026年第一季度全球家用大清洁机器人出货893万台’等三项数据均未标注引用编号（原文仅在句末统一标[5]，但[5]标题为‘WAIC 智能终端产业质变已至：现场实景和IDC数据告诉我们什么？’，未说明其是否包含全部三项细分数据；若[5]实际仅提供其中部分数据，则其余数据缺失对应引用，构成引用覆盖率缺陷）",
-      "‘数据分歧说明’部分将‘2023年中国市场规模1939亿元’推算为约272亿美元（隐含使用2023年平均汇率≈7.1），但报告正文中[4]未提供汇率依据，且该推算未在正文中出现、仅存在于分歧说明的括号内分析中；该推算属于报告内部新增计算，却未标注方法来源或验证依据，导致该‘数量级矛盾’的论证基础不可追溯，违反‘只判断报告内部是否自洽、引用是否支撑对应陈述’原则——推算本身无引用支撑，构成事实性陈述未覆盖引用"
+      "一、主流厂商产品路线图与技术参数对比：'Apple在2026年推出的M4 Ultra神经网络引擎达到38 TOPS'、'高通2026年推出的骁龙X Elite Gen 3 NPU算力为45 TOPS'、'华为麒麟9010系列在2026年AI推理能力达到国际主流水平'、'瑞芯微RK182X芯片支持7B参数级端侧大模型'四句均标注[1]（孤证），但[1]来源为同一非权威博客文章（guijiagi.com），且该链接未在参考文献中提供可验证的公开存档证据（如Wayback Machine快照或DOI）；根据审稿要求，事实性陈述需有对应编号引用，而此处将多个独立断言全部压至单一孤证[1]，导致引用覆盖率不足——每项具体技术参数/能力声明应有其独立、匹配的信源支撑，至少需区分不同厂商数据来源（如Apple参数应引Apple官方或经验证媒体实测报告，而非笼统共用[1]）；须拆分[1]为多个独立引用，或为每项参数补充对应编号（如[1a][1b]等）并更新参考文献列表。",
+      "二、终端应用场景落地进展与需求分化：'2026年中国人形机器人销量预计翻倍至2.8万台'标注[4]（孤证），但[4]来源标题为《电子行业深度报告：2026年端侧AI产业深度……》，其主题聚焦AI终端与芯片，未明确涵盖人形机器人细分品类；该陈述缺乏与[4]内容的相关性锚点（如原文是否提及'人形机器人'、'2.8万台'、'翻倍'等关键词），构成引用失配；须核查[4]原文是否确实包含该数据，若无则删除该句或替换为有明确出处的表述。",
+      "结构完整性：第三节'生态壁垒与软件栈竞争格局'仅写'公开资料有限，待补充'，符合审稿口径中'某节确实没有可用资料时可接受'的要求，不视为缺陷；但第五节'新兴技术突破与潜在颠覆点'末句'公开资料有限，待补充'与前文'据Yole Group报告……'存在逻辑断裂——Yole数据已作为有效引用出现（[11]），说明该节并非全然'公开资料有限'，而应基于[11]及其他可用信源展开分析（如Yole对边缘AI芯片增长的驱动因素、技术路径预测等），当前'待补充'属无效占位，破坏本节自洽性；须删除'公开资料有限，待补充'，并基于[11]及已有信源对Yole数据进行简要解读（例如：'Yole Group预测边缘AI芯片市场2025–2029年CAGR达~32%，主因MCU+NPU融合架构加速渗透消费与工业边缘场景[11]'）"
     ],
     "hard_problems": [],
     "blocking": false
@@ -291,14 +385,10 @@
   "citation_errors": [],
   "grounding_warnings": [
     {
-      "sentence": "本节所列参数均引自同一信源[2]，其未区分测试条件（如INT4/INT8精度、功耗约束、时钟频率等），故数值仅具相对参考意义。",
-      "citations": [
-        2
-      ],
-      "bigram_recall": 0.02,
-      "tokens": [
-        "int4/int8"
-      ]
+      "autocited_sentences": 1
+    },
+    {
+      "stripped_unsupported_sentences": 1
     }
   ],
   "citation_meta": {
@@ -308,23 +398,34 @@
       3,
       4,
       5,
+      7,
       8,
       9,
-      10
+      10,
+      11
     ],
     "dropped": [],
     "model_bib_lines": 0
   },
+  "source_quality": {
+    "total_sources": 11,
+    "tiers": {
+      "blog": 6,
+      "unknown": 5
+    },
+    "corroborated": 0,
+    "single_source": 11
+  },
   "metrics": {
-    "citation_coverage": 0.909,
-    "source_diversity": 6,
-    "source_pages": 8,
+    "citation_coverage": 1.0,
+    "source_diversity": 8,
+    "source_pages": 10,
     "conflict_handled": 1.0,
-    "conflict_total": 2,
+    "conflict_total": 3,
     "conflict_verified": true,
     "revisions": 2,
-    "total_citations": 22,
-    "fact_statements": 22,
+    "total_citations": 21,
+    "fact_statements": 21,
     "dangling_citations": [],
     "targets_met": true,
     "quality_ok": true

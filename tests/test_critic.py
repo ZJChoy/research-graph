@@ -45,6 +45,24 @@ def test_hard_problems_surface_citation_errors():
     assert any("100" in p for p in problems)
 
 
+def test_route_revises_on_blocking_and_ends_in_clean():
+    assert critic.route_after_critic(
+        {"review_report": {"blocking": True}, "revision_count": 1}
+    ) == "revise"
+    assert critic.route_after_critic(
+        {"review_report": {"blocking": True}, "revision_count": 2}
+    ) == "clean"
+
+
+def test_route_allows_one_model_driven_revision():
+    assert critic.route_after_critic(
+        {"review_report": {"pass": False, "blocking": False}, "revision_count": 1}
+    ) == "revise"
+    assert critic.route_after_critic(
+        {"review_report": {"pass": False, "blocking": False}, "revision_count": 2}
+    ) == "clean"
+
+
 def test_model_pass_is_overridden_by_hard_problems(monkeypatch):
     monkeypatch.setattr(critic, "llm", FakeLLM('{"pass": true, "problems": []}'))
     state = {
