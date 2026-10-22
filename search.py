@@ -21,7 +21,9 @@ load_dotenv()
 # 每个子问题最多取多少条搜索结果（多了慢且重复，M3 评测时再调）
 MAX_RESULTS = 6
 # 每个子问题最多保留几页正文：太少会几节共用同一来源，太多则 token 吃紧
-MAX_PAGES_PER_QUERY = 3
+MAX_PAGES = 3
+# 跨查询累积时最多尝试抓几页，避免慢查询把整路拖死
+MAX_FETCH_ATTEMPTS = 8
 
 def _proxy_variants() -> list:
     """代理和直连都试：本地代理挂掉时检索仍能继续。"""
@@ -279,6 +281,7 @@ def retrieve(query: str, topic: str | None = None) -> list[dict]:
 
     seen_urls = set()
     results = []
+    attempts = 0
     for q in queries:
         hits = search_web(q)
         if not hits:
@@ -290,9 +293,12 @@ def retrieve(query: str, topic: str | None = None) -> list[dict]:
         # 与子问题更贴近的排前面
         on_topic.sort(key=lambda h: len(_bigrams(to_query(query, 20)) & _bigrams((h.get("title") or "") + (h.get("body") or ""))), reverse=True)
         for hit in on_topic:
+            if len(results) >= MAX_PAGES or attempts >= MAX_FETCH_ATTEMPTS:
+                return results
             if hit["url"] in seen_urls:
                 continue
             seen_urls.add(hit["url"])
+            attempts += 1
             content = fetch_page(hit["url"])
             if content:
                 results.append({
@@ -300,8 +306,6 @@ def retrieve(query: str, topic: str | None = None) -> list[dict]:
                     "url": hit["url"],
                     "content": content,
                 })
-            if len(results) >= MAX_PAGES_PER_QUERY:
-                return results
     return results
 
 if __name__ == "__main__":

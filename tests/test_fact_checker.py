@@ -26,7 +26,7 @@ NOTES = [
 def test_conflict_candidates_find_same_entity_different_numbers():
     cands = fact_checker.conflict_candidates(NOTES)
     assert cands
-    assert "mlu370-s" in cands[0]["issue"]
+    assert "mlu370s" in cands[0]["issue"]
     assert {cands[0]["a"], cands[0]["b"]} == {NOTES[0]["fact"], NOTES[1]["fact"]}
 
 
@@ -50,14 +50,36 @@ def test_solitary_candidates_only_uncorroborated_numeric_notes():
 def test_check_all_parses_confirmed_candidates(monkeypatch):
     verdict = {
         "conflicts": [{"a": NOTES[0]["fact"], "b": NOTES[1]["fact"], "issue": "算力不一致"}],
+        "additional_conflicts": [{"a": "甲", "b": "乙", "issue": "模型补充"}],
         "solitary": [],
         "rejected": [{"index": 1, "kind": "solitary", "reason": "非关键数字"}],
     }
     monkeypatch.setattr(fact_checker, "llm", FakeLLM(json.dumps(verdict, ensure_ascii=False)))
     out = fact_checker.check_all("测试", [{"notes": NOTES}])
-    assert len(out["conflicts"]) == 1
+    assert len(out["conflicts"]) == 2
+    by_source = {c["discovered_by"] for c in out["conflicts"]}
+    assert by_source == {"code_candidate", "model"}
     assert out["candidate_review"]["confirmed_conflicts"] == 1
+    assert out["candidate_review"]["model_additional"] == 1
     assert out["candidate_review"]["rejected"] == 1
+
+
+def test_entity_normalization_matches_model_name_variants():
+    notes = [
+        {"fact": "Snapdragon 8 Gen 4 的 NPU 算力为 45 TOPS", "url": "https://a.com/1"},
+        {"fact": "骁龙8 Gen4 的 NPU 算力为 60 TOPS", "url": "https://b.com/2"},
+    ]
+    cands = fact_checker.conflict_candidates(notes)
+    assert cands
+    assert "gen4" in cands[0]["issue"].lower()
+
+
+def test_entity_normalization_matches_hyphen_variants():
+    notes = [
+        {"fact": "MLU370-S 的算力为 256 TOPS", "url": "https://a.com/1"},
+        {"fact": "MLU370S 的算力为 180 TOPS", "url": "https://b.com/2"},
+    ]
+    assert fact_checker.conflict_candidates(notes)
 
 
 def test_check_all_degrades_to_code_candidates_on_bad_json(monkeypatch):

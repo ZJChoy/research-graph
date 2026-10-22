@@ -1,0 +1,38 @@
+name: live-batch
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 每周一 03:17 UTC；只跑 2 个主题，控制成本
+    - cron: "17 3 * * 1"
+
+concurrency:
+  group: live-batch
+  cancel-in-progress: false
+
+jobs:
+  batch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install
+        run: |
+          python -m pip install -U pip
+          pip install -r requirements-dev.txt
+      - name: Two-topic regression
+        env:
+          DASHSCOPE_API_KEY: ${{ secrets.DASHSCOPE_API_KEY }}
+          CLAIM_VERIFY_ENABLED: "1"
+        run: python batch_eval.py topics_ci.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: batch-report
+          path: |
+            batch_report.md
+            batch_results.json

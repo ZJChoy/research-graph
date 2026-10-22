@@ -14,6 +14,11 @@ def _run(rid="20260101-000000-web-test"):
                     "source_pages": 1, "conflict_total": 0,
                     "conflict_handled": None, "dangling_citations": [],
                     "fact_statements": 1},
+        "raw_metrics": {"citation_coverage": 0.8},
+        "final_metrics": {"citation_coverage": 1.0},
+        "grounding_warnings": [
+            {"autocited_sentences": 1}, {"stripped_unsupported_sentences": 2},
+        ],
         "final_notes": [{
             "url": "https://example.com/a", "source_title": "示例来源",
             "fact": "甲芯片算力达到 128 TOPS", "tier": "official",
@@ -30,7 +35,7 @@ def _run(rid="20260101-000000-web-test"):
                                  "unsupported": 0, "unverified": 0},
         "llm_usage": {"total": {"calls": 3, "input_tokens": 100,
                                 "output_tokens": 50, "seconds": 1.0}},
-        "review_report": {"pass": True},
+        "review_report": {"pass": False, "problems": ["测试审稿意见"]},
     }
 
 
@@ -50,6 +55,9 @@ def test_runs_index_and_detail(monkeypatch, workdir):
     assert "官方/机构" in detail.text
     assert "多源印证" in detail.text
     assert "supported" in detail.text
+    assert "代码兜底" in detail.text
+    assert "补引用 1 句、删句 2 句" in detail.text
+    assert "测试审稿意见" in detail.text
 
     assert client.get("/runs/does-not-exist").status_code == 404
 

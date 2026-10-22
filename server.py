@@ -286,9 +286,13 @@ def run_detail(run_id: str):
     report = run.get("report") or ""
     sents = grounding.split_sentences(report)
 
+    raw_cov = (run.get("raw_metrics") or {}).get("citation_coverage")
+    final_cov = (run.get("final_metrics") or metrics).get("citation_coverage")
     summary = [
         ("交付", "达标" if run.get("quality_ok") else "未达标"),
-        ("覆盖率", "%.3f" % metrics.get("citation_coverage", 0)),
+        ("覆盖率（初稿→终稿）",
+         ("%.3f → %.3f" % (raw_cov, final_cov)) if raw_cov is not None
+         else "%.3f" % metrics.get("citation_coverage", 0)),
         ("来源", "%s 域名 / %s 页面" % (metrics.get("source_diversity", 0),
                                      metrics.get("source_pages", 0))),
         ("冲突", "%s 组（处理率 %s）" % (metrics.get("conflict_total", 0),
@@ -356,11 +360,32 @@ def run_detail(run_id: str):
         for c in conflicts
     ) or '<li class="muted">本次未检出冲突。</li>'
 
+    cleanup = {"autocited": 0, "stripped": 0, "marked": 0}
+    for w in run.get("grounding_warnings") or []:
+        cleanup["autocited"] += w.get("autocited_sentences", 0)
+        cleanup["stripped"] += w.get("stripped_unsupported_sentences", 0)
+        cleanup["marked"] += w.get("marked_inferences", 0)
+    cleanup_html = "补引用 %d 句、删句 %d 句、标推断 %d 句" % (
+        cleanup["autocited"], cleanup["stripped"], cleanup["marked"])
+    if not any(cleanup.values()):
+        cleanup_html = '<span class="muted">本次没有触发代码兜底。</span>'
+
+    review = run.get("review_report") or {}
+    problems = review.get("problems") or []
+    if problems:
+        review_html = "<ul>" + "".join(
+            "<li>%s</li>" % html.escape(str(p)[:300]) for p in problems[:5]
+        ) + "</ul>"
+    else:
+        review_html = '<p class="muted">无审稿意见。</p>'
+
     body = f"""
 <table>{summary_html}</table>
 <h2>来源与引用</h2>{sources_html}
 <h2>断言核验</h2>{claims_html}
 <h2>冲突</h2><ul>{conflict_html}</ul>
+<h2>代码兜底</h2><p>{cleanup_html}</p>
+<h2>审稿建议</h2>{review_html}
 <h2>报告</h2><pre>{html.escape(report)}</pre>
 """
     return _shell("运行详情 · %s" % run.get("topic", ""), body)

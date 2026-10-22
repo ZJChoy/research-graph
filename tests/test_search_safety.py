@@ -49,6 +49,29 @@ def test_safe_get_rejects_redirect_to_metadata(monkeypatch):
     assert calls == ["https://example.com/start"], "重定向目标必须在发请求前被拒绝"
 
 
+def test_retrieve_merges_results_across_query_variants(monkeypatch):
+    calls = []
+
+    def fake_search(q):
+        calls.append(q)
+        if len(calls) == 1:
+            return [
+                {"title": "端侧AI芯片格局 分析一", "url": "https://a.com/1", "body": ""},
+                {"title": "端侧AI芯片格局 分析二", "url": "https://a.com/2", "body": ""},
+            ]
+        return [
+            {"title": "端侧AI芯片格局 分析二", "url": "https://a.com/2", "body": ""},
+            {"title": "端侧AI芯片格局 分析三", "url": "https://a.com/3", "body": ""},
+        ]
+
+    monkeypatch.setattr(search, "search_web", fake_search)
+    monkeypatch.setattr(search, "fetch_page", lambda url, timeout=15.0: "正文 " + url)
+    items = search.retrieve("主流厂商产品路线图", "端侧 AI 芯片格局（2025-2026）")
+    assert [i["url"] for i in items] == [
+        "https://a.com/1", "https://a.com/2", "https://a.com/3"
+    ]
+
+
 def test_safe_get_follows_public_redirect(monkeypatch):
     calls = []
 
