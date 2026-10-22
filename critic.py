@@ -6,7 +6,7 @@ import json
 import re
 
 from eval_run import citation_coverage, factual_sentences
-from llm import get_llm
+from llm import get_llm, invoke
 
 llm = get_llm()
 
@@ -89,7 +89,7 @@ def _parse(text: str) -> dict:
 
 
 def critic(state: dict) -> dict:
-    resp = llm.invoke(REVIEW_PROMPT.format(topic=state["topic"], draft=state["draft"]))
+    resp = invoke(llm, "critic", REVIEW_PROMPT.format(topic=state["topic"], draft=state["draft"]))
     verdict = _parse(resp.content)
     problems = _hard_problems(state)
     # 交付判定只认代码能数的东西；模型意见单独留档，作为建议而非门槛

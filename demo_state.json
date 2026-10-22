@@ -6,7 +6,15 @@
       "subquestion": "主流厂商产品路线图与技术参数对比",
       "notes": [
         {
-          "fact": "Apple在2026年推出的M4 Ultra神经网络引擎达到38 TOPS，A19 Pro芯片在移动端实现30 TOPS推理能力 [S2]",
+          "fact": "高通骁龙8至尊版Gen 5（Snapdragon 8 Elite Gen 5）搭载Hexagon NPU，算力达到75TOPS，能在本地流畅运行Llama3 8B量级的大模型 [S3]",
+          "url": "https://www.xcc.com/news/detail/5575390",
+          "source_title": "2026 年端侧 AI 芯片格局：手机、PC、汽车与机器人谁先跑出来？",
+          "confidence": "medium",
+          "tier": "unknown",
+          "published": 2026
+        },
+        {
+          "fact": "Apple M4 Ultra的神经网络引擎达到38 TOPS，A19 Pro芯片在移动端实现了30 TOPS的推理能力 [S2]",
           "url": "https://guijiagi.com/posts/edge-ai-chip-landscape-2026/",
           "source_title": "2026年端侧AI芯片格局：谁在领跑？ | AI 实战派 · 从技术到赚钱",
           "confidence": "medium",
@@ -14,7 +22,7 @@
           "published": null
         },
         {
-          "fact": "高通2026年推出的骁龙X Elite Gen 3 NPU算力为45 TOPS，支持100B参数模型本地推理 [S2]",
+          "fact": "高通骁龙X Elite Gen 3的NPU算力为45 TOPS，支持100B参数模型本地推理 [S2]",
           "url": "https://guijiagi.com/posts/edge-ai-chip-landscape-2026/",
           "source_title": "2026年端侧AI芯片格局：谁在领跑？ | AI 实战派 · 从技术到赚钱",
           "confidence": "medium",
@@ -22,7 +30,15 @@
           "published": null
         },
         {
-          "fact": "华为麒麟9010系列在2026年AI推理能力达到国际主流水平 [S2]",
+          "fact": "联发科天玑9500搭载第九代NPU990，算力逼近100TOPS，首次在安卓平台实现实时端侧文生图 [S3]",
+          "url": "https://www.xcc.com/news/detail/5575390",
+          "source_title": "2026 年端侧 AI 芯片格局：手机、PC、汽车与机器人谁先跑出来？",
+          "confidence": "medium",
+          "tier": "unknown",
+          "published": 2026
+        },
+        {
+          "fact": "华为麒麟9010系列在2026年AI推理能力上达到了国际主流水平 [S2]",
           "url": "https://guijiagi.com/posts/edge-ai-chip-landscape-2026/",
           "source_title": "2026年端侧AI芯片格局：谁在领跑？ | AI 实战派 · 从技术到赚钱",
           "confidence": "medium",
@@ -30,14 +46,15 @@
           "published": null
         },
         {
-          "fact": "端侧AI芯片选型需关注的四个关键指标按优先级排序为：算力（TOPS）、功耗（mW或W）、内存带宽、工具链成熟度 [S1]",
+          "fact": "端侧AI芯片的四个关键指标按优先级排序为：算力（TOPS）、功耗（mW或W）、内存带宽、工具链成熟度 [S1]",
           "url": "https://blog.csdn.net/weixin_29171087/article/details/166283587",
           "source_title": "端侧AI芯片选型指南：10家核心企业技术路线与落地实践-CSDN博客",
           "confidence": "medium",
           "tier": "blog",
           "published": null
         }
-      ]
+      ],
+      "injection_skipped": 0
     },
     {
       "subquestion": "终端应用场景落地进展与需求分化",
@@ -83,14 +100,15 @@
           "published": null
         },
         {
-          "fact": "2025年初以来，用户端对智能化的需求持续爆发，形成围绕AI手机和AI PC的‘智慧生活模型’ [S1]",
+          "fact": "2025年初以来，轻量化、低成本的端侧部署快速发力，形成围绕AI手机和AI PC的‘智慧生活模型’ [S1]",
           "url": "https://www.questmobile.cn/research/report/1993213148656668673/",
           "source_title": "QuestMobile2025年中国AI终端生态发展研究报告：AI终端三大领域格局初...",
           "confidence": "medium",
           "tier": "unknown",
           "published": 2026
         }
-      ]
+      ],
+      "injection_skipped": 0
     },
     {
       "subquestion": "生态壁垒与软件栈竞争格局",
@@ -104,7 +122,7 @@
           "published": 2024
         },
         {
-          "fact": "NVIDIA B200芯片采用台积电4NP工艺，集成2080亿个晶体管，FP8算力高达10 PFLOPS，较Hopper架构H100提升近5倍。",
+          "fact": "NVIDIA B200芯片采用台积电4NP工艺，集成2080亿个晶体管，FP8算力高达10 PFLOPS，较H100提升近5倍。",
           "url": "https://www.ai-nav-build.com/blog-ai-chips-war-2026.html",
           "source_title": "AI芯片战争2026：NVIDIA、AMD、华为昇腾、Google TPU的竞争格局与技术路线 | 星枢 AI",
           "confidence": "medium",
@@ -120,7 +138,7 @@
           "published": 2024
         },
         {
-          "fact": "CUDA生态拥有超过400万注册开发者、数千个优化的库和框架。",
+          "fact": "AMD MI400芯片采用3nm制程，晶体管数量超过2500亿，FP16算力达到6.5 PFLOPS。",
           "url": "https://www.ai-nav-build.com/blog-ai-chips-war-2026.html",
           "source_title": "AI芯片战争2026：NVIDIA、AMD、华为昇腾、Google TPU的竞争格局与技术路线 | 星枢 AI",
           "confidence": "medium",
@@ -128,28 +146,29 @@
           "published": 2024
         },
         {
-          "fact": "AMD MI400芯片采用3nm制程，晶体管数量超过2500亿，FP16算力达6.5 PFLOPS。",
-          "url": "https://www.ai-nav-build.com/blog-ai-chips-war-2026.html",
-          "source_title": "AI芯片战争2026：NVIDIA、AMD、华为昇腾、Google TPU的竞争格局与技术路线 | 星枢 AI",
-          "confidence": "medium",
-          "tier": "unknown",
-          "published": 2024
-        },
-        {
-          "fact": "瑞芯微RK182X芯片支持7B参数级端侧大模型，帮助相关企业实现60%以上营业收入增长。",
+          "fact": "瑞芯微RK182X芯片支持7B端侧大模型推理，且2026年其端侧AI芯片业务贡献了公司60%以上的营业收入。",
           "url": "https://www.cet.com.cn/wzsy/kjzx/10468829.shtml",
           "source_title": "2026国内端侧AI企业竞争格局拆解：全栈壁垒决胜差异化赛道",
           "confidence": "medium",
           "tier": "unknown",
           "published": null
+        },
+        {
+          "fact": "2026年端侧AI芯片市场竞争壁垒已从硬件参数比拼转移至软件生态与工具链效率的较量。",
+          "url": "https://max.book118.com/html/2026/1001/5132023121013330.shtm",
+          "source_title": "端侧AI芯片的编译工具链与软件生态易用性：开发者的选择与厂商的竞争...",
+          "confidence": "medium",
+          "tier": "blog",
+          "published": 2026
         }
-      ]
+      ],
+      "injection_skipped": 0
     },
     {
       "subquestion": "供应链安全与地缘政策影响",
       "notes": [
         {
-          "fact": "预计到2028年全球端侧AI硬件市场规模将突破3000亿美元，年复合增长率超20%。",
+          "fact": "预计到2028年全球端侧AI硬件市场规模将突破3000亿美元，年复合增长率超20% [S1]",
           "url": "https://max.book118.com/html/2026/0810/8071022075010116.shtm",
           "source_title": "端侧AI硬件供应链本土化与地缘政治影响：核心算力芯片与先进封装产能...",
           "confidence": "medium",
@@ -157,7 +176,7 @@
           "published": 2026
         },
         {
-          "fact": "先进封装产能本土化率在部分区域将提升至40%以上。",
+          "fact": "先进封装产能本土化率在部分区域将提升至40%以上 [S1]",
           "url": "https://max.book118.com/html/2026/0810/8071022075010116.shtm",
           "source_title": "端侧AI硬件供应链本土化与地缘政治影响：核心算力芯片与先进封装产能...",
           "confidence": "medium",
@@ -165,7 +184,7 @@
           "published": 2026
         },
         {
-          "fact": "28nm以上芯片国产化率超70%，车规级MCU、电源管理芯片等实现全链替代。",
+          "fact": "28nm以上芯片国产化率超70%，车规级MCU、电源管理芯片等实现全链替代 [S3]",
           "url": "https://news.sina.cn/bignews/insight/2026-05-12/detail-inhxrwqh9865418.d.html?vt=4",
           "source_title": "当盟友企业沦为地缘博弈牺牲品，全球芯片供应链的重组将如何重塑科技...",
           "confidence": "medium",
@@ -173,7 +192,7 @@
           "published": null
         },
         {
-          "fact": "美国对华封锁导致美企承受28%成本上升，芯片涨价周期中消费电子厂商利润被挤压（如苹果Mac mini提价33%）。",
+          "fact": "美国对华封锁导致美企承受28%成本上升，芯片涨价周期中消费电子厂商利润被挤压（如苹果Mac mini提价33%） [S3]",
           "url": "https://news.sina.cn/bignews/insight/2026-05-12/detail-inhxrwqh9865418.d.html?vt=4",
           "source_title": "当盟友企业沦为地缘博弈牺牲品，全球芯片供应链的重组将如何重塑科技...",
           "confidence": "medium",
@@ -181,7 +200,7 @@
           "published": null
         },
         {
-          "fact": "存储芯片领域三星、美光、SK海力士垄断全球95%市场。",
+          "fact": "存储芯片领域三星、美光、SK海力士垄断全球95%市场 [S3]",
           "url": "https://news.sina.cn/bignews/insight/2026-05-12/detail-inhxrwqh9865418.d.html?vt=4",
           "source_title": "当盟友企业沦为地缘博弈牺牲品，全球芯片供应链的重组将如何重塑科技...",
           "confidence": "medium",
@@ -189,20 +208,21 @@
           "published": null
         },
         {
-          "fact": "华为昇腾算力达英伟达H20的3倍。",
+          "fact": "华为昇腾算力达英伟达H20的3倍 [S3]",
           "url": "https://news.sina.cn/bignews/insight/2026-05-12/detail-inhxrwqh9865418.d.html?vt=4",
           "source_title": "当盟友企业沦为地缘博弈牺牲品，全球芯片供应链的重组将如何重塑科技...",
           "confidence": "medium",
           "tier": "unknown",
           "published": null
         }
-      ]
+      ],
+      "injection_skipped": 0
     },
     {
       "subquestion": "新兴技术突破与潜在颠覆点",
       "notes": [
         {
-          "fact": "2025年中国AI手机出货量约1.18亿台，占智能手机大盘40.7%；预计2026年达1.47亿台，渗透率升至53.0%。",
+          "fact": "2025年中国AI手机出货量约1.18亿台，占智能手机大盘40.7%；预计2026年达1.47亿台，渗透率升至53.0% [S1]",
           "url": "https://www.sohu.com/a/1071853930_166680",
           "source_title": "集微咨询发布《2026年端侧AI芯片行业研究报告》",
           "confidence": "medium",
@@ -210,7 +230,7 @@
           "published": 2025
         },
         {
-          "fact": "Gartner预计，2026年全球AI PC出货量将达1.43亿台、占PC总出货55%。",
+          "fact": "Gartner预计，2026年全球AI PC出货量将达1.43亿台、占PC总出货55% [S1]",
           "url": "https://www.sohu.com/a/1071853930_166680",
           "source_title": "集微咨询发布《2026年端侧AI芯片行业研究报告》",
           "confidence": "medium",
@@ -218,7 +238,7 @@
           "published": 2025
         },
         {
-          "fact": "IDC与Omdia对2026年全球AI眼镜出货量的预测分别为2,368.7万台与1,500万台。",
+          "fact": "IDC对2026年全球AI眼镜出货量的预测为2,368.7万台 [S1]",
           "url": "https://www.sohu.com/a/1071853930_166680",
           "source_title": "集微咨询发布《2026年端侧AI芯片行业研究报告》",
           "confidence": "medium",
@@ -226,7 +246,7 @@
           "published": 2025
         },
         {
-          "fact": "中国乘用车城市NOA渗透率由2024年1月的7.8%持续爬升至2025年5月的22.0%。",
+          "fact": "中国乘用车城市NOA渗透率由2024年1月的7.8%持续爬升至2025年5月的22.0% [S1]",
           "url": "https://www.sohu.com/a/1071853930_166680",
           "source_title": "集微咨询发布《2026年端侧AI芯片行业研究报告》",
           "confidence": "medium",
@@ -234,7 +254,7 @@
           "published": 2025
         },
         {
-          "fact": "新唐科技M55M1 AI MCU基于Arm Cortex-M55内核，集成Ethos-U55 NPU，在典型工作负载下可实现480 GOPS的推理性能。",
+          "fact": "新唐科技M55M1 AI MCU基于Arm Cortex-M55内核，集成Ethos-U55 NPU，在典型工作负载下可实现480 GOPS的推理性能 [S3]",
           "url": "https://www.hengsen.cn/news/edge-ai-scale-deployment-2026",
           "source_title": "端侧AI规模化落地元年：MCU+NPU融合如何重塑边缘智能格局",
           "confidence": "medium",
@@ -242,21 +262,30 @@
           "published": 2023
         },
         {
-          "fact": "据Yole Group报告，全球边缘AI芯片市场预计从2025年的约120亿美元增长至2029年的超过350亿美元。",
+          "fact": "2026年被半导体业界普遍定义为「端侧AI规模化落地元年」 [S3]",
           "url": "https://www.hengsen.cn/news/edge-ai-scale-deployment-2026",
           "source_title": "端侧AI规模化落地元年：MCU+NPU融合如何重塑边缘智能格局",
           "confidence": "medium",
           "tier": "unknown",
           "published": 2023
         }
-      ]
+      ],
+      "injection_skipped": 0
     }
   ],
   "final_notes": [
     {
+      "url": "https://www.xcc.com/news/detail/5575390",
+      "source_title": "2026 年端侧 AI 芯片格局：手机、PC、汽车与机器人谁先跑出来？",
+      "fact": "高通骁龙8至尊版Gen 5（Snapdragon 8 Elite Gen 5）搭载Hexagon NPU，算力达到75TOPS，能在本地流畅运行Llama3 8B量级的大模型 [S3]；联发科天玑9500搭载第九代NPU990，算力逼近100TOPS，首次在安卓平台实现实时端侧文生图 [S3]",
+      "tier": "unknown",
+      "published": 2026,
+      "corroborated": false
+    },
+    {
       "url": "https://guijiagi.com/posts/edge-ai-chip-landscape-2026/",
       "source_title": "2026年端侧AI芯片格局：谁在领跑？ | AI 实战派 · 从技术到赚钱",
-      "fact": "Apple在2026年推出的M4 Ultra神经网络引擎达到38 TOPS，A19 Pro芯片在移动端实现30 TOPS推理能力 [S2]；高通2026年推出的骁龙X Elite Gen 3 NPU算力为45 TOPS，支持100B参数模型本地推理 [S2]；华为麒麟9010系列在2026年AI推理能力达到国际主流水平 [S2]",
+      "fact": "Apple M4 Ultra的神经网络引擎达到38 TOPS，A19 Pro芯片在移动端实现了30 TOPS的推理能力 [S2]；高通骁龙X Elite Gen 3的NPU算力为45 TOPS，支持100B参数模型本地推理 [S2]；华为麒麟9010系列在2026年AI推理能力上达到了国际主流水平 [S2]",
       "tier": "blog",
       "published": null,
       "corroborated": false
@@ -264,7 +293,7 @@
     {
       "url": "https://blog.csdn.net/weixin_29171087/article/details/166283587",
       "source_title": "端侧AI芯片选型指南：10家核心企业技术路线与落地实践-CSDN博客",
-      "fact": "端侧AI芯片选型需关注的四个关键指标按优先级排序为：算力（TOPS）、功耗（mW或W）、内存带宽、工具链成熟度 [S1]",
+      "fact": "端侧AI芯片的四个关键指标按优先级排序为：算力（TOPS）、功耗（mW或W）、内存带宽、工具链成熟度 [S1]",
       "tier": "blog",
       "published": null,
       "corroborated": false
@@ -288,7 +317,7 @@
     {
       "url": "https://www.questmobile.cn/research/report/1993213148656668673/",
       "source_title": "QuestMobile2025年中国AI终端生态发展研究报告：AI终端三大领域格局初...",
-      "fact": "2025年初以来，用户端对智能化的需求持续爆发，形成围绕AI手机和AI PC的‘智慧生活模型’ [S1]",
+      "fact": "2025年初以来，轻量化、低成本的端侧部署快速发力，形成围绕AI手机和AI PC的‘智慧生活模型’ [S1]",
       "tier": "unknown",
       "published": 2026,
       "corroborated": false
@@ -296,7 +325,7 @@
     {
       "url": "https://www.ai-nav-build.com/blog-ai-chips-war-2026.html",
       "source_title": "AI芯片战争2026：NVIDIA、AMD、华为昇腾、Google TPU的竞争格局与技术路线 | 星枢 AI",
-      "fact": "2026年全球AI芯片市场规模据Mercury Research估算已突破1580亿美元，而2023年还不到400亿美元。；NVIDIA B200芯片采用台积电4NP工艺，集成2080亿个晶体管，FP8算力高达10 PFLOPS，较Hopper架构H100提升近5倍。；NVIDIA FY2026 Q2财报显示其数据中心业务营收达362亿美元，同比增长143%，其中AI训练和推理相关收入占比超过80%。；CUDA生态拥有超过400万注册开发者、数千个优化的库和框架。；AMD MI400芯片采用3nm制程，晶体管数量超过2500亿，FP16算力达6.5 PFLOPS。",
+      "fact": "2026年全球AI芯片市场规模据Mercury Research估算已突破1580亿美元，而2023年还不到400亿美元。；NVIDIA B200芯片采用台积电4NP工艺，集成2080亿个晶体管，FP8算力高达10 PFLOPS，较H100提升近5倍。；NVIDIA FY2026 Q2财报显示其数据中心业务营收达362亿美元，同比增长143%，其中AI训练和推理相关收入占比超过80%。；AMD MI400芯片采用3nm制程，晶体管数量超过2500亿，FP16算力达到6.5 PFLOPS。",
       "tier": "unknown",
       "published": 2024,
       "corroborated": false
@@ -304,15 +333,23 @@
     {
       "url": "https://www.cet.com.cn/wzsy/kjzx/10468829.shtml",
       "source_title": "2026国内端侧AI企业竞争格局拆解：全栈壁垒决胜差异化赛道",
-      "fact": "瑞芯微RK182X芯片支持7B参数级端侧大模型，帮助相关企业实现60%以上营业收入增长。",
+      "fact": "瑞芯微RK182X芯片支持7B端侧大模型推理，且2026年其端侧AI芯片业务贡献了公司60%以上的营业收入。",
       "tier": "unknown",
       "published": null,
       "corroborated": false
     },
     {
+      "url": "https://max.book118.com/html/2026/1001/5132023121013330.shtm",
+      "source_title": "端侧AI芯片的编译工具链与软件生态易用性：开发者的选择与厂商的竞争...",
+      "fact": "2026年端侧AI芯片市场竞争壁垒已从硬件参数比拼转移至软件生态与工具链效率的较量。",
+      "tier": "blog",
+      "published": 2026,
+      "corroborated": false
+    },
+    {
       "url": "https://max.book118.com/html/2026/0810/8071022075010116.shtm",
       "source_title": "端侧AI硬件供应链本土化与地缘政治影响：核心算力芯片与先进封装产能...",
-      "fact": "预计到2028年全球端侧AI硬件市场规模将突破3000亿美元，年复合增长率超20%。；先进封装产能本土化率在部分区域将提升至40%以上。",
+      "fact": "预计到2028年全球端侧AI硬件市场规模将突破3000亿美元，年复合增长率超20% [S1]；先进封装产能本土化率在部分区域将提升至40%以上 [S1]",
       "tier": "blog",
       "published": 2026,
       "corroborated": false
@@ -320,7 +357,7 @@
     {
       "url": "https://news.sina.cn/bignews/insight/2026-05-12/detail-inhxrwqh9865418.d.html?vt=4",
       "source_title": "当盟友企业沦为地缘博弈牺牲品，全球芯片供应链的重组将如何重塑科技...",
-      "fact": "28nm以上芯片国产化率超70%，车规级MCU、电源管理芯片等实现全链替代。；美国对华封锁导致美企承受28%成本上升，芯片涨价周期中消费电子厂商利润被挤压（如苹果Mac mini提价33%）。；存储芯片领域三星、美光、SK海力士垄断全球95%市场。；华为昇腾算力达英伟达H20的3倍。",
+      "fact": "28nm以上芯片国产化率超70%，车规级MCU、电源管理芯片等实现全链替代 [S3]；美国对华封锁导致美企承受28%成本上升，芯片涨价周期中消费电子厂商利润被挤压（如苹果Mac mini提价33%） [S3]；存储芯片领域三星、美光、SK海力士垄断全球95%市场 [S3]；华为昇腾算力达英伟达H20的3倍 [S3]",
       "tier": "unknown",
       "published": null,
       "corroborated": false
@@ -328,7 +365,7 @@
     {
       "url": "https://www.sohu.com/a/1071853930_166680",
       "source_title": "集微咨询发布《2026年端侧AI芯片行业研究报告》",
-      "fact": "2025年中国AI手机出货量约1.18亿台，占智能手机大盘40.7%；预计2026年达1.47亿台，渗透率升至53.0%。；Gartner预计，2026年全球AI PC出货量将达1.43亿台、占PC总出货55%。；IDC与Omdia对2026年全球AI眼镜出货量的预测分别为2,368.7万台与1,500万台。；中国乘用车城市NOA渗透率由2024年1月的7.8%持续爬升至2025年5月的22.0%。",
+      "fact": "2025年中国AI手机出货量约1.18亿台，占智能手机大盘40.7%；预计2026年达1.47亿台，渗透率升至53.0% [S1]；Gartner预计，2026年全球AI PC出货量将达1.43亿台、占PC总出货55% [S1]；IDC对2026年全球AI眼镜出货量的预测为2,368.7万台 [S1]；中国乘用车城市NOA渗透率由2024年1月的7.8%持续爬升至2025年5月的22.0% [S1]",
       "tier": "blog",
       "published": 2025,
       "corroborated": false
@@ -336,47 +373,37 @@
     {
       "url": "https://www.hengsen.cn/news/edge-ai-scale-deployment-2026",
       "source_title": "端侧AI规模化落地元年：MCU+NPU融合如何重塑边缘智能格局",
-      "fact": "新唐科技M55M1 AI MCU基于Arm Cortex-M55内核，集成Ethos-U55 NPU，在典型工作负载下可实现480 GOPS的推理性能。；据Yole Group报告，全球边缘AI芯片市场预计从2025年的约120亿美元增长至2029年的超过350亿美元。",
+      "fact": "新唐科技M55M1 AI MCU基于Arm Cortex-M55内核，集成Ethos-U55 NPU，在典型工作负载下可实现480 GOPS的推理性能 [S3]；2026年被半导体业界普遍定义为「端侧AI规模化落地元年」 [S3]",
       "tier": "unknown",
       "published": 2023,
       "corroborated": false
     }
   ],
-  "conflicts": [
-    {
-      "a": "2026年全球AI PC出货量预计达1.43亿台 [S3]",
-      "b": "Gartner预计，2026年全球AI PC出货量将达1.43亿台、占PC总出货55%。（来源: 集微咨询发布《2026年端侧AI芯片行业研究报告》）",
-      "issue": "两处均称2026年AI PC出货量为1.43亿台，但[S3]未注明占比，而集微咨询来源明确给出‘占PC总出货55%’；该数值与另一笔记‘2027年AI PC预计占整机市场84.6% [S2]’存在趋势性矛盾——若2026年仅占55%，则2027年跃升至84.6%缺乏中间过渡支撑，且84.6%远超行业合理增速（尤其对比同期AI手机渗透率仅从40.7%→53.0%），构成隐性逻辑冲突"
-    },
-    {
-      "a": "2027年AI PC预计占整机市场84.6% [S2]",
-      "b": "Gartner预计，2026年全球AI PC出货量将达1.43亿台、占PC总出货55%。（来源: 集微咨询发布《2026年端侧AI芯片行业研究报告》）",
-      "issue": "同一指标（AI PC在PC整机市场的渗透率）在相邻年份（2026 vs 2027）出现断崖式跃升（55% → 84.6%），但无任何中间数据或技术/政策驱动依据支撑，构成时间序列上的显著矛盾"
-    },
-    {
-      "a": "华为昇腾算力达英伟达H20的3倍。（来源: 当盟友企业沦为地缘博弈牺牲品，全球芯片供应链的重组将如何重塑科技...）",
-      "b": "NVIDIA B200芯片采用台积电4NP工艺，集成2080亿个晶体管，FP8算力高达10 PFLOPS，较Hopper架构H100提升近5倍。（来源: AI芯片战争2026：NVIDIA、AMD、华为昇腾、Google TPU的竞争格局与技术路线 | 星枢 AI）",
-      "issue": "H20是NVIDIA面向中国市场的特供版，FP16算力约60 TFLOPS（公开实测值），而昇腾910B典型FP16算力约256 TFLOPS（官方白皮书），二者比值约4×，但‘昇腾算力达H20的3倍’未说明精度/场景，与B200（10 PFLOPS = 10,000 TFLOPS）的量级完全不在同一层级（B200是数据中心GPU，H20/昇腾属不同代际与定位），将端侧/边缘AI芯片语境下的‘昇腾’与数据中心级B200并列比较，存在对象错配型矛盾"
-    }
-  ],
+  "conflicts": [],
   "solitary": [
-    "Apple在2026年推出的M4 Ultra神经网络引擎达到38 TOPS，A19 Pro芯片在移动端实现30 TOPS推理能力 [S2]",
-    "高通2026年推出的骁龙X Elite Gen 3 NPU算力为45 TOPS，支持100B参数模型本地推理 [S2]",
-    "华为麒麟9010系列在2026年AI推理能力达到国际主流水平 [S2]",
-    "2023年端侧AI整体市场规模达1939亿元，其中端侧大模型细分市场为8亿元 [S2]",
+    "Apple M4 Ultra的神经网络引擎达到38 TOPS，A19 Pro芯片在移动端实现了30 TOPS的推理能力 [S2]",
+    "高通骁龙X Elite Gen 3的NPU算力为45 TOPS，支持100B参数模型本地推理 [S2]",
+    "联发科天玑9500搭载第九代NPU990，算力逼近100TOPS，首次在安卓平台实现实时端侧文生图 [S3]",
+    "华为麒麟9010系列在2026年AI推理能力上达到了国际主流水平 [S2]",
     "机构预测2028年端侧AI全行业规模将升至19071亿元，端侧大模型增至79亿元 [S2]",
+    "2027年AI PC预计占整机市场84.6%，AI手机份额预计达51.9% [S2]",
+    "2026年全球AI PC出货量预计达1.43亿台 [S3]",
     "2026年中国人形机器人销量预计翻倍至2.8万台 [S3]",
-    "2025年初以来，用户端对智能化的需求持续爆发，形成围绕AI手机和AI PC的‘智慧生活模型’ [S1]",
-    "瑞芯微RK182X芯片支持7B参数级端侧大模型，帮助相关企业实现60%以上营业收入增长。（来源: 2026国内端侧AI企业竞争格局拆解：全栈壁垒决胜差异化赛道）",
-    "新唐科技M55M1 AI MCU基于Arm Cortex-M55内核，集成Ethos-U55 NPU，在典型工作负载下可实现480 GOPS的推理性能。（来源: 端侧AI规模化落地元年：MCU+NPU融合如何重塑边缘智能格局）",
-    "据Yole Group报告，全球边缘AI芯片市场预计从2025年的约120亿美元增长至2029年的超过350亿美元。（来源: 端侧AI规模化落地元年：MCU+NPU融合如何重塑边缘智能格局）"
+    "2026年全球AI芯片市场规模据Mercury Research估算已突破1580亿美元，而2023年还不到400亿美元。",
+    "NVIDIA B200芯片采用台积电4NP工艺，集成2080亿个晶体管，FP8算力高达10 PFLOPS，较H100提升近5倍。"
   ],
+  "conflict_candidates": {
+    "conflict_candidates": 0,
+    "solitary_candidates": 10,
+    "confirmed_conflicts": 0,
+    "rejected": 0
+  },
   "review_report": {
     "pass": false,
     "problems": [
-      "一、主流厂商产品路线图与技术参数对比：'Apple在2026年推出的M4 Ultra神经网络引擎达到38 TOPS'、'高通2026年推出的骁龙X Elite Gen 3 NPU算力为45 TOPS'、'华为麒麟9010系列在2026年AI推理能力达到国际主流水平'、'瑞芯微RK182X芯片支持7B参数级端侧大模型'四句均标注[1]（孤证），但[1]来源为同一非权威博客文章（guijiagi.com），且该链接未在参考文献中提供可验证的公开存档证据（如Wayback Machine快照或DOI）；根据审稿要求，事实性陈述需有对应编号引用，而此处将多个独立断言全部压至单一孤证[1]，导致引用覆盖率不足——每项具体技术参数/能力声明应有其独立、匹配的信源支撑，至少需区分不同厂商数据来源（如Apple参数应引Apple官方或经验证媒体实测报告，而非笼统共用[1]）；须拆分[1]为多个独立引用，或为每项参数补充对应编号（如[1a][1b]等）并更新参考文献列表。",
-      "二、终端应用场景落地进展与需求分化：'2026年中国人形机器人销量预计翻倍至2.8万台'标注[4]（孤证），但[4]来源标题为《电子行业深度报告：2026年端侧AI产业深度……》，其主题聚焦AI终端与芯片，未明确涵盖人形机器人细分品类；该陈述缺乏与[4]内容的相关性锚点（如原文是否提及'人形机器人'、'2.8万台'、'翻倍'等关键词），构成引用失配；须核查[4]原文是否确实包含该数据，若无则删除该句或替换为有明确出处的表述。",
-      "结构完整性：第三节'生态壁垒与软件栈竞争格局'仅写'公开资料有限，待补充'，符合审稿口径中'某节确实没有可用资料时可接受'的要求，不视为缺陷；但第五节'新兴技术突破与潜在颠覆点'末句'公开资料有限，待补充'与前文'据Yole Group报告……'存在逻辑断裂——Yole数据已作为有效引用出现（[11]），说明该节并非全然'公开资料有限'，而应基于[11]及其他可用信源展开分析（如Yole对边缘AI芯片增长的驱动因素、技术路径预测等），当前'待补充'属无效占位，破坏本节自洽性；须删除'公开资料有限，待补充'，并基于[11]及已有信源对Yole数据进行简要解读（例如：'Yole Group预测边缘AI芯片市场2025–2029年CAGR达~32%，主因MCU+NPU融合架构加速渗透消费与工业边缘场景[11]'）"
+      "一、主流厂商产品路线图与技术参数对比：'瑞芯微RK182X芯片支持7B端侧大模型推理 [8]'未在正文说明该能力的算力/功耗/内存等关键约束条件（如是否需量化、是否含缓存优化、是否仅限INT4），而[8]来源为cet.com.cn，属行业媒体，但该陈述缺乏必要技术限定，构成事实性断言缺失支撑；应补充限定说明（如'在INT4量化、32MB片上缓存条件下可运行7B模型'）或标注'具体部署条件未见公开披露，待确认'。",
+      "二、终端应用场景落地进展与需求分化：存在重复引用与信源冲突风险——[12]和[5]均给出'2026年全球AI PC出货量1.43亿台'，但[12]标注来源为'集微咨询'，[5]为'sohu.com'且未注明是否转引同一机构；报告未说明二者是否同源，亦未对'集微咨询'是否为权威第三方研究机构作基本说明（如其是否具备独立调研能力、是否被Gartner/IDC等交叉验证），违反'冲突处理'要求；应统一归并为单一编号（如仅保留[12]）并补充对集微咨询资质的简要说明（如'集微咨询系专注半导体领域的第三方研究机构，其数据常被产业链引用'），或明确标注'[5]与[12]数据一致，疑似同源，未获原始方法论验证'。",
+      "三、生态壁垒与软件栈竞争格局：'当前公开信源中未见关于主流厂商工具链市占率、开发者采用率等可量化竞争指标的披露'为合理陈述，但该节未按大纲要求完成'生态壁垒与软件栈竞争格局'的实质分析——仅指出'无数据'，却未利用已有信息（如[9]提及'工具链易用性影响开发者选择'）展开定性比较（例如：高通SNPE vs 联发科NeuroPilot在模型转换支持度、调试工具完备性等方面的公开反馈差异）；应补充基于[9]等可用信源的有限定性分析，或明确写'公开资料有限，待补充'以满足结构完整性要求。"
     ],
     "hard_problems": [],
     "blocking": false
@@ -385,49 +412,408 @@
   "citation_errors": [],
   "grounding_warnings": [
     {
+      "sentence": "高通骁龙8至尊版Gen 5搭载Hexagon NPU，算力达到75TOPS，能在本地流畅运行Llama3 8B量级的大模型 [1]（来源：xcc.com，自媒体/单一来源）。",
+      "citations": [
+        1
+      ],
+      "bigram_recall": 0.81,
+      "tokens": [
+        "xcc.com"
+      ]
+    },
+    {
+      "sentence": "联发科天玑9500搭载第九代NPU990，算力逼近100TOPS，首次在安卓平台实现实时端侧文生图 [1]（来源：xcc.com，自媒体/单一来源）。",
+      "citations": [
+        1
+      ],
+      "bigram_recall": 0.78,
+      "tokens": [
+        "xcc.com"
+      ]
+    },
+    {
+      "sentence": "新唐科技M55M1 AI MCU基于Arm Cortex-M55内核，集成Ethos-U55 NPU，在典型工作负载下可实现480 GOPS的推理性能 [13]（来源：hengsen.cn，未知/单一来源）。",
+      "citations": [
+        13
+      ],
+      "bigram_recall": 0.81,
+      "tokens": [
+        "hengsen.cn"
+      ]
+    },
+    {
+      "sentence": "端侧AI芯片的四个关键指标按优先级排序为：算力（TOPS）、功耗（mW或W）、内存带宽、工具链成熟度 [3]（来源：CSDN博客，自媒体/单一来源）。",
+      "citations": [
+        3
+      ],
+      "bigram_recall": 0.75,
+      "tokens": [
+        "csdn"
+      ]
+    },
+    {
+      "sentence": "2026年全球AI PC出货量预计达1.43亿台 [5]（来源：sohu.com，自媒体/单一来源），与[12]数值一致，但信源独立。",
+      "citations": [
+        5,
+        12
+      ],
+      "bigram_recall": 0.46,
+      "tokens": [
+        "sohu.com"
+      ]
+    },
+    {
+      "sentence": "2026年中国人形机器人销量预计翻倍至2.8万台 [5]（来源：sohu.com，自媒体/单一来源）。",
+      "citations": [
+        5
+      ],
+      "bigram_recall": 0.59,
+      "tokens": [
+        "sohu.com"
+      ]
+    },
+    {
+      "sentence": "2026年被半导体业界普遍定义为「端侧AI规模化落地元年」 [13]（来源：hengsen.cn，未知/单一来源）。",
+      "citations": [
+        13
+      ],
+      "bigram_recall": 0.63,
+      "tokens": [
+        "hengsen.cn"
+      ]
+    },
+    {
+      "sentence": "2023年端侧AI整体市场规模达1939亿元，其中端侧大模型细分市场为8亿元 [4]（来源：sohu.com，自媒体/单一来源）；",
+      "citations": [
+        4
+      ],
+      "bigram_recall": 0.69,
+      "tokens": [
+        "sohu.com"
+      ]
+    },
+    {
+      "sentence": "机构预测2028年端侧AI全行业规模将升至19071亿元，端侧大模型增至79亿元 [4]（来源：sohu.com，自媒体/单一来源）。",
+      "citations": [
+        4
+      ],
+      "bigram_recall": 0.71,
+      "tokens": [
+        "sohu.com"
+      ]
+    },
+    {
+      "sentence": "28nm以上芯片国产化率超70%，车规级MCU、电源管理芯片等实现全链替代 [11]（来源：sina.cn，未知/单一来源）。",
+      "citations": [
+        11
+      ],
+      "bigram_recall": 0.76,
+      "tokens": [
+        "sina.cn"
+      ]
+    },
+    {
+      "sentence": "美国对华封锁导致美企承受28%成本上升，芯片涨价周期中消费电子厂商利润被挤压（如苹果Mac mini提价33%） [11]（来源：sina.cn，未知/单一来源）。",
+      "citations": [
+        11
+      ],
+      "bigram_recall": 0.82,
+      "tokens": [
+        "sina.cn"
+      ]
+    },
+    {
+      "sentence": "存储芯片领域三星、美光、SK海力士垄断全球95%市场 [11]（来源：sina.cn，未知/单一来源）。",
+      "citations": [
+        11
+      ],
+      "bigram_recall": 0.69,
+      "tokens": [
+        "sina.cn"
+      ]
+    },
+    {
+      "sentence": "2025年初以来，轻量化、低成本的端侧部署快速发力，形成围绕AI手机和AI PC的‘智慧生活模型’ [6]（来源：QuestMobile，未知/单一来源）。",
+      "citations": [
+        6
+      ],
+      "bigram_recall": 0.69,
+      "tokens": [
+        "questmobile"
+      ]
+    },
+    {
       "autocited_sentences": 1
     },
     {
-      "stripped_unsupported_sentences": 1
+      "stripped_unsupported_sentences": 3
+    },
+    {
+      "marked_inferences": 1
     }
   ],
   "citation_meta": {
     "cited": [
       1,
-      2,
       3,
       4,
       5,
-      7,
+      6,
       8,
-      9,
-      10,
-      11
+      11,
+      12,
+      13
     ],
     "dropped": [],
     "model_bib_lines": 0
   },
   "source_quality": {
-    "total_sources": 11,
+    "total_sources": 13,
     "tiers": {
-      "blog": 6,
-      "unknown": 5
+      "unknown": 6,
+      "blog": 7
     },
     "corroborated": 0,
-    "single_source": 11
+    "single_source": 13
+  },
+  "llm_usage": {
+    "nodes": {
+      "planner": {
+        "calls": 1,
+        "input_tokens": 68,
+        "output_tokens": 401,
+        "seconds": 9.25
+      },
+      "researcher": {
+        "calls": 5,
+        "input_tokens": 13094,
+        "output_tokens": 1570,
+        "seconds": 36.96
+      },
+      "fact_checker": {
+        "calls": 1,
+        "input_tokens": 2513,
+        "output_tokens": 367,
+        "seconds": 8.56
+      },
+      "writer": {
+        "calls": 1,
+        "input_tokens": 2901,
+        "output_tokens": 951,
+        "seconds": 21.5
+      },
+      "critic": {
+        "calls": 2,
+        "input_tokens": 3747,
+        "output_tokens": 1122,
+        "seconds": 26.81
+      },
+      "revise": {
+        "calls": 1,
+        "input_tokens": 4294,
+        "output_tokens": 1054,
+        "seconds": 23.83
+      },
+      "claim_verify": {
+        "calls": 3,
+        "input_tokens": 3482,
+        "output_tokens": 1134,
+        "seconds": 26.34
+      }
+    },
+    "total": {
+      "calls": 14,
+      "input_tokens": 30099,
+      "output_tokens": 6599,
+      "seconds": 153.25
+    }
+  },
+  "raw_metrics": {
+    "citation_coverage": 0.955,
+    "source_diversity": 8,
+    "source_pages": 11,
+    "conflict_handled": null,
+    "conflict_total": 0,
+    "conflict_verified": false,
+    "revisions": 1,
+    "total_citations": 22,
+    "fact_statements": 22,
+    "dangling_citations": [],
+    "targets_met": false,
+    "quality_ok": true
+  },
+  "final_metrics": {
+    "citation_coverage": 1.0,
+    "source_diversity": 7,
+    "source_pages": 9,
+    "conflict_handled": null,
+    "conflict_total": 0,
+    "conflict_verified": false,
+    "revisions": 2,
+    "total_citations": 20,
+    "fact_statements": 19,
+    "dangling_citations": [],
+    "targets_met": false,
+    "quality_ok": true
+  },
+  "claim_verification": [
+    {
+      "sentence": "高通骁龙8至尊版Gen 5搭载Hexagon NPU，算力达到75TOPS，能在本地流畅运行Llama3 8B量级的大模型 [1]（来源：xcc.com，自媒体/单一来源）。",
+      "citations": [
+        1
+      ],
+      "verdict": "supported",
+      "reason": "资料[S3]明确陈述‘高通骁龙8至尊版Gen 5搭载Hexagon NPU，算力达到75TOPS，能在本地流畅运行Llama3 8B量级的大模型’，与claim完全一致，主体、数字、能力描述均匹配。"
+    },
+    {
+      "sentence": "联发科天玑9500搭载第九代NPU990，算力逼近100TOPS，首次在安卓平台实现实时端侧文生图 [1]（来源：xcc.com，自媒体/单一来源）。",
+      "citations": [
+        1
+      ],
+      "verdict": "supported",
+      "reason": "资料[S3]明确陈述‘联发科天玑9500搭载第九代NPU990，算力逼近100TOPS，首次在安卓平台实现实时端侧文生图’，与claim完全一致，主体、数值、定性表述均匹配。"
+    },
+    {
+      "sentence": "瑞芯微RK182X芯片支持7B端侧大模型推理 [8]。",
+      "citations": [
+        8
+      ],
+      "verdict": "supported",
+      "reason": "资料明确陈述‘瑞芯微RK182X芯片支持7B端侧大模型推理’，与claim完全一致，主体和能力描述无出入。"
+    },
+    {
+      "sentence": "新唐科技M55M1 AI MCU基于Arm Cortex-M55内核，集成Ethos-U55 NPU，在典型工作负载下可实现480 GOPS的推理性能 [13]（来源：hengsen.cn，未知/单一来源）。",
+      "citations": [
+        13
+      ],
+      "verdict": "supported",
+      "reason": "资料[S3]明确陈述‘新唐科技M55M1 AI MCU基于Arm Cortex-M55内核，集成Ethos-U55 NPU，在典型工作负载下可实现480 GOPS的推理性能’，与claim完全一致，技术参数和架构描述均匹配。"
+    },
+    {
+      "sentence": "2025年中国AI手机出货量约1.18亿台，占智能手机大盘40.7%[12]；",
+      "citations": [
+        12
+      ],
+      "verdict": "supported",
+      "reason": "资料[S1]明确陈述‘2025年中国AI手机出货量约1.18亿台，占智能手机大盘40.7%’，与claim数字、时间、主体、比例完全一致。"
+    },
+    {
+      "sentence": "预计2026年达1.47亿台，渗透率升至53.0% [12]（来源：集微咨询，自媒体/单一来源）。",
+      "citations": [
+        12
+      ],
+      "verdict": "supported",
+      "reason": "资料[S1]明确陈述‘预计2026年达1.47亿台，渗透率升至53.0%’，与claim数字、时间、比例完全一致。"
+    },
+    {
+      "sentence": "Gartner预计，2026年全球AI PC出货量将达1.43亿台、占PC总出货55% [12]（来源：集微咨询，自媒体/单一来源）。",
+      "citations": [
+        12
+      ],
+      "verdict": "supported",
+      "reason": "资料[S1]明确引用‘Gartner预计，2026年全球AI PC出货量将达1.43亿台、占PC总出货55%’，与claim来源归属、数字、时间、比例完全一致。"
+    },
+    {
+      "sentence": "IDC对2026年全球AI眼镜出货量的预测为2,368.7万台 [12]（来源：集微咨询，自媒体/单一来源）。",
+      "citations": [
+        12
+      ],
+      "verdict": "supported",
+      "reason": "资料[S1]明确陈述‘IDC对2026年全球AI眼镜出货量的预测为2,368.7万台’，与claim主体、时间、数字完全一致。"
+    },
+    {
+      "sentence": "中国乘用车城市NOA渗透率由2024年1月的7.8%持续爬升至2025年5月的22.0% [12]（来源：集微咨询，自媒体/单一来源）。",
+      "citations": [
+        12
+      ],
+      "verdict": "supported",
+      "reason": "资料[S1]明确陈述‘中国乘用车城市NOA渗透率由2024年1月的7.8%持续爬升至2025年5月的22.0%’，与claim中时间、数值、主体、趋势完全一致。"
+    },
+    {
+      "sentence": "2026年全球AI PC出货量预计达1.43亿台 [5]（来源：sohu.com，自媒体/单一来源），与[12]数值一致，但信源独立。",
+      "citations": [
+        5,
+        12
+      ],
+      "verdict": "supported",
+      "reason": "资料[S1]和[S3]均明确给出‘2026年全球AI PC出货量预计达1.43亿台’，数字、时间、主体完全一致。"
+    },
+    {
+      "sentence": "2026年中国人形机器人销量预计翻倍至2.8万台 [5]（来源：sohu.com，自媒体/单一来源）。",
+      "citations": [
+        5
+      ],
+      "verdict": "supported",
+      "reason": "资料[S3]明确陈述‘2026年中国人形机器人销量预计翻倍至2.8万台’，与claim完全一致。"
+    },
+    {
+      "sentence": "2026年被半导体业界普遍定义为「端侧AI规模化落地元年」 [13]（来源：hengsen.cn，未知/单一来源）。",
+      "citations": [
+        13
+      ],
+      "verdict": "supported",
+      "reason": "资料[S3]明确陈述‘2026年被半导体业界普遍定义为「端侧AI规模化落地元年」’，与claim文字、时间、主体完全一致。"
+    },
+    {
+      "sentence": "机构预测2028年端侧AI全行业规模将升至19071亿元，端侧大模型增至79亿元 [4]（来源：sohu.com，自媒体/单一来源）。",
+      "citations": [
+        4
+      ],
+      "verdict": "supported",
+      "reason": "资料[S2]明确陈述‘机构预测2028年端侧AI全行业规模将升至19071亿元，端侧大模型增至79亿元’，数字、时间、主体、细分项完全一致。"
+    },
+    {
+      "sentence": "28nm以上芯片国产化率超70%，车规级MCU、电源管理芯片等实现全链替代 [11]（来源：sina.cn，未知/单一来源）。",
+      "citations": [
+        11
+      ],
+      "verdict": "supported",
+      "reason": "资料[S3]明确陈述‘28nm以上芯片国产化率超70%，车规级MCU、电源管理芯片等实现全链替代’，与claim文字完全一致。"
+    },
+    {
+      "sentence": "美国对华封锁导致美企承受28%成本上升，芯片涨价周期中消费电子厂商利润被挤压（如苹果Mac mini提价33%） [11]（来源：sina.cn，未知/单一来源）。",
+      "citations": [
+        11
+      ],
+      "verdict": "supported",
+      "reason": "资料[S3]明确陈述‘美国对华封锁导致美企承受28%成本上升，芯片涨价周期中消费电子厂商利润被挤压（如苹果Mac mini提价33%）’，所有数值、主体、因果关系均一致。"
+    },
+    {
+      "sentence": "存储芯片领域三星、美光、SK海力士垄断全球95%市场 [11]（来源：sina.cn，未知/单一来源）。",
+      "citations": [
+        11
+      ],
+      "verdict": "supported",
+      "reason": "资料[S3]明确陈述‘存储芯片领域三星、美光、SK海力士垄断全球95%市场’，与claim完全一致。"
+    },
+    {
+      "sentence": "2025年初以来，轻量化、低成本的端侧部署快速发力，形成围绕AI手机和AI PC的‘智慧生活模型’ [6]（来源：QuestMobile，未知/单一来源）。",
+      "citations": [
+        6
+      ],
+      "verdict": "supported",
+      "reason": "资料[S1]与claim文字完全一致，明确陈述了‘2025年初以来，轻量化、低成本的端侧部署快速发力，形成围绕AI手机和AI PC的‘智慧生活模型’’，时间、主体、行为、结果均严格匹配。"
+    }
+  ],
+  "claim_verify_summary": {
+    "total": 17,
+    "supported": 17,
+    "partial": 0,
+    "unsupported": 0,
+    "unverified": 0
   },
   "metrics": {
     "citation_coverage": 1.0,
-    "source_diversity": 8,
-    "source_pages": 10,
-    "conflict_handled": 1.0,
-    "conflict_total": 3,
-    "conflict_verified": true,
+    "source_diversity": 7,
+    "source_pages": 9,
+    "conflict_handled": null,
+    "conflict_total": 0,
+    "conflict_verified": false,
     "revisions": 2,
-    "total_citations": 21,
-    "fact_statements": 21,
+    "total_citations": 20,
+    "fact_statements": 19,
     "dangling_citations": [],
-    "targets_met": true,
+    "targets_met": false,
     "quality_ok": true
   },
   "quality_ok": true

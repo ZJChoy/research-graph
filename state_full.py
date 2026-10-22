@@ -16,6 +16,7 @@ class GraphState(TypedDict, total=False):
     research_notes: Annotated[list, merge_list]
     conflicts: list
     solitary: list
+    conflict_candidates: dict   # 代码候选的确认/否定统计
     draft: str
     review_report: dict
     revision_count: int
@@ -23,3 +24,7 @@ class GraphState(TypedDict, total=False):
     citation_meta: dict         # finalize_report 的统计（cited/dropped/model_bib_lines）
     grounding_warnings: list    # 二元词重合度偏低等软警告，只记录不返工
     final_notes: list           # 报告 [n] 实际对应的笔记（截断后的编号口径）
+    raw_metrics: dict           # code_clean 之前的初稿指标
+    final_metrics: dict         # code_clean 之后的终稿指标
+    claim_verification: list    # 断言级核验明细
+    claim_verify_summary: dict  # supported/partial/unsupported 计数

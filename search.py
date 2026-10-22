@@ -6,7 +6,8 @@
 import ipaddress
 import os
 import re
-from urllib.parse import urlparse
+import socket
+from urllib.parse import urljoin, urlparse
 
 import httpx
 import trafilatura
@@ -22,10 +23,14 @@ MAX_RESULTS = 6
 # 每个子问题最多保留几页正文：太少会几节共用同一来源，太多则 token 吃紧
 MAX_PAGES_PER_QUERY = 3
 
-def _proxy() -> dict:
-    """读 .env 里的代理配置；没配就不走代理。"""
+def _proxy_variants() -> list:
+    """代理和直连都试：本地代理挂掉时检索仍能继续。"""
     proxy = os.getenv("HTTPS_PROXY") or os.getenv("HTTP_PROXY")
-    return {"proxy": proxy} if proxy else {}
+    return [{"proxy": proxy}, {}] if proxy else [{}]
+
+
+def _proxy() -> dict:
+    return _proxy_variants()[0]
 
 def search_web(query: str, retries: int = 2) -> list[dict]:
     """搜索：返回 [{title, url, body}]，失败重试一次后返回空列表（不抛异常）。"""
@@ -34,9 +39,10 @@ def search_web(query: str, retries: int = 2) -> list[dict]:
     if cached is not None:
         return cached
     last = None
-    for attempt in range(retries):
+    variants = _proxy_variants()
+    for attempt in range(max(retries, len(variants))):
         try:
-            with DDGS(**_proxy()) as ddgs:
+            with DDGS(**variants[attempt % len(variants)]) as ddgs:
                 hits = [
                     {"title": h["title"], "url": h["href"], "body": h.get("body", "")}
                     for h in ddgs.text(query, max_results=MAX_RESULTS)
@@ -50,11 +56,28 @@ def search_web(query: str, retries: int = 2) -> list[dict]:
     print(f"[search_web] 搜索失败（{query[:20]}）: {last}")
     return []
 
-def _is_safe_url(url: str) -> bool:
-    """SSRF 防护：只放行公网 http(s) 地址，挡回环/内网/链路本地地址。
+MAX_REDIRECTS = 5
 
-    局限：域名解析到内网 IP 的情况这里查不到（不做 DNS 解析），
-    由 fetch_page 里对最终 URL（含重定向后）的二次校验兜底。
+
+def _ip_is_public(ip) -> bool:
+    return not (ip.is_private or ip.is_loopback or ip.is_link_local
+                or ip.is_reserved or ip.is_unspecified or ip.is_multicast)
+
+
+def _resolve_ips(host: str):
+    """解析域名到所有 IP；解析失败返回 None。"""
+    try:
+        infos = socket.getaddrinfo(host, None)
+    except OSError:
+        return None
+    return {info[4][0] for info in infos}
+
+
+def _is_safe_url(url: str, resolve: bool = False) -> bool:
+    """SSRF 防护：只放行公网 http(s) 地址。
+
+    resolve=True 时额外做 DNS 解析，挡住「公网域名解析到内网 IP」的情况。
+    解析失败时：配了代理就放行（域名可能只有代理能解析），否则拒绝。
     """
     try:
         p = urlparse(url)
@@ -66,34 +89,59 @@ def _is_safe_url(url: str) -> bool:
     if not host or host == "localhost" or host.endswith(".local"):
         return False
     try:
-        ip = ipaddress.ip_address(host)
+        return _ip_is_public(ipaddress.ip_address(host))
     except ValueError:
-        return True          # 普通域名，放行
-    return not (ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved)
+        pass
+    if not resolve:
+        return True
+    ips = _resolve_ips(host)
+    if ips is None:
+        return bool(os.getenv("HTTPS_PROXY") or os.getenv("HTTP_PROXY"))
+    return all(_ip_is_public(ipaddress.ip_address(ip)) for ip in ips)
+
+
+def _safe_get(url: str, timeout: float, proxy, headers):
+    """手动跟随重定向：每一跳都先做 DNS 校验再发请求，避免盲 SSRF。"""
+    current = url
+    for _ in range(MAX_REDIRECTS + 1):
+        if not _is_safe_url(current, resolve=True):
+            raise ValueError(f"拒绝访问非公网地址: {current}")
+        resp = httpx.get(
+            current,
+            timeout=timeout,
+            follow_redirects=False,
+            proxy=proxy,
+            headers=headers,
+            trust_env=False,   # proxy=None 时别让 httpx 又去读环境代理
+        )
+        if resp.status_code in (301, 302, 303, 307, 308):
+            location = resp.headers.get("location")
+            if location:
+                current = urljoin(str(resp.url), location)
+                continue
+        return resp
+    raise ValueError("重定向次数过多")
 
 
 def fetch_page(url: str, timeout: float = 15.0) -> str:
     """抓单个网页并抽取正文，失败返回空串。"""
-    if not _is_safe_url(url):
+    if not _is_safe_url(url, resolve=True):
         print(f"[fetch_page] 拒绝访问非公网地址: {url}")
         return ""
     cached = cache.get("page", url)
     if cached is not None:
         return cached
+    headers = {"User-Agent": "Mozilla/5.0 (research-graph/0.1)"}
     try:
         proxy = os.getenv("HTTPS_PROXY") or os.getenv("HTTP_PROXY")
-        resp = httpx.get(
-            url,
-            timeout=timeout,
-            follow_redirects=True,
-            proxy=proxy,
-            headers={"User-Agent": "Mozilla/5.0 (research-graph/0.1)"},
-        )
+        try:
+            resp = _safe_get(url, timeout, proxy, headers)
+        except Exception:
+            if not proxy:
+                raise
+            # 本地代理挂了就直连再试一次
+            resp = _safe_get(url, timeout, None, headers)
         resp.raise_for_status()
-        # 重定向可能把请求带进内网，对最终 URL 再校验一次
-        if not _is_safe_url(str(resp.url)):
-            print(f"[fetch_page] 重定向到非公网地址，已丢弃: {resp.url}")
-            return ""
     except Exception as e:
         print(f"[fetch_page] 抓取失败 {url}: {e}")
         return ""
@@ -113,6 +161,20 @@ def _relevant(query: str, hit: dict) -> bool:
     q = _bigrams(query)
     hay = _bigrams((hit.get("title") or "") + (hit.get("body") or ""))
     return len(q & hay) >= 2
+
+
+_INJECTION = re.compile(
+    r"(ignore\s+(all\s+)?(previous|above)\s+instructions"
+    r"|disregard\s+.{0,30}instructions"
+    r"|忽略(以上|之前|前面|上述).{0,8}(指令|要求|设定)"
+    r"|system\s*prompt|你现在是|你现在扮演|从现在开始你)",
+    re.I,
+)
+
+
+def injection_signals(text: str) -> list:
+    """粗筛网页里的提示注入痕迹，返回命中的短语（去重，最多 5 条）。"""
+    return sorted({m.group(0)[:40] for m in _INJECTION.finditer(text or "")})[:5]
 
 
 _QUERY_PUNCT = re.compile(r"[的与和及或、，。：:；;（）()【】\[\]？?！!\"'“”‘’\s]+")

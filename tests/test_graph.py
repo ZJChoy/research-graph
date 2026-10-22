@@ -68,6 +68,8 @@ def test_full_graph_offline(wired, workdir):
         assert "[1] 测试来源 - https://example.com/a" in state["draft"]
         assert state["citation_errors"] == []
         assert state["review_report"]["pass"] is True
+        assert state["raw_metrics"]["fact_statements"] > 0
+        assert state["final_metrics"]["quality_ok"] is True
     finally:
         app._sqlite_conn.close()
 

@@ -2,20 +2,20 @@
   {
     "topic": "端侧 AI 芯片格局（2025-2026）",
     "ok": true,
-    "chars": 3346,
-    "elapsed_s": 156.7,
+    "chars": 2553,
+    "elapsed_s": 159.3,
     "metrics": {
       "citation_coverage": 1.0,
       "source_diversity": 9,
       "source_pages": 11,
-      "conflict_handled": 1.0,
-      "conflict_total": 2,
-      "conflict_verified": true,
+      "conflict_handled": null,
+      "conflict_total": 0,
+      "conflict_verified": false,
       "revisions": 2,
-      "total_citations": 28,
-      "fact_statements": 22,
+      "total_citations": 27,
+      "fact_statements": 25,
       "dangling_citations": [],
-      "targets_met": true,
+      "targets_met": false,
       "quality_ok": true
     },
     "blocking": false,
@@ -23,60 +23,181 @@
     "cleanup": {
       "autocited": 1,
       "stripped": 0,
-      "marked": 1
+      "marked": 0
     },
     "source_quality": {
-      "total_sources": 11,
+      "total_sources": 12,
       "tiers": {
-        "blog": 5,
-        "unknown": 6
+        "blog": 7,
+        "unknown": 5
       },
       "corroborated": 0,
-      "single_source": 11
+      "single_source": 12
+    },
+    "llm_usage": {
+      "nodes": {
+        "planner": {
+          "calls": 1,
+          "input_tokens": 68,
+          "output_tokens": 401,
+          "seconds": 10.22
+        },
+        "researcher": {
+          "calls": 5,
+          "input_tokens": 13094,
+          "output_tokens": 1606,
+          "seconds": 39.14
+        },
+        "fact_checker": {
+          "calls": 1,
+          "input_tokens": 2385,
+          "output_tokens": 369,
+          "seconds": 8.73
+        },
+        "writer": {
+          "calls": 1,
+          "input_tokens": 2769,
+          "output_tokens": 1029,
+          "seconds": 23.16
+        },
+        "critic": {
+          "calls": 2,
+          "input_tokens": 3807,
+          "output_tokens": 1002,
+          "seconds": 23.29
+        },
+        "revise": {
+          "calls": 1,
+          "input_tokens": 4119,
+          "output_tokens": 982,
+          "seconds": 22.23
+        },
+        "claim_verify": {
+          "calls": 3,
+          "input_tokens": 3749,
+          "output_tokens": 1421,
+          "seconds": 32.55
+        }
+      },
+      "total": {
+        "calls": 14,
+        "input_tokens": 29991,
+        "output_tokens": 6810,
+        "seconds": 159.32
+      }
+    },
+    "raw_coverage": 0.96,
+    "final_coverage": 1.0,
+    "claim_verify": {
+      "total": 20,
+      "supported": 19,
+      "partial": 0,
+      "unsupported": 1,
+      "unverified": 0
     }
   },
   {
     "topic": "RISC-V 在数据中心服务器的落地进展",
     "ok": true,
-    "chars": 3559,
-    "elapsed_s": 171.1,
+    "chars": 735,
+    "elapsed_s": 192.3,
     "metrics": {
       "citation_coverage": 1.0,
-      "source_diversity": 8,
-      "source_pages": 9,
-      "conflict_handled": 1.0,
-      "conflict_total": 3,
-      "conflict_verified": true,
+      "source_diversity": 2,
+      "source_pages": 2,
+      "conflict_handled": null,
+      "conflict_total": 0,
+      "conflict_verified": false,
       "revisions": 2,
-      "total_citations": 19,
-      "fact_statements": 18,
+      "total_citations": 9,
+      "fact_statements": 9,
       "dangling_citations": [],
-      "targets_met": true,
-      "quality_ok": true
+      "targets_met": false,
+      "quality_ok": false
     },
-    "blocking": false,
+    "blocking": true,
     "citation_errors": 0,
     "cleanup": {
-      "autocited": 1,
-      "stripped": 4,
-      "marked": 1
+      "autocited": 0,
+      "stripped": 2,
+      "marked": 0
     },
     "source_quality": {
-      "total_sources": 12,
+      "total_sources": 2,
       "tiers": {
         "media": 1,
-        "unknown": 5,
-        "blog": 6
+        "unknown": 1
       },
-      "corroborated": 4,
-      "single_source": 8
+      "corroborated": 0,
+      "single_source": 2
+    },
+    "llm_usage": {
+      "nodes": {
+        "planner": {
+          "calls": 1,
+          "input_tokens": 58,
+          "output_tokens": 388,
+          "seconds": 9.86
+        },
+        "researcher": {
+          "calls": 5,
+          "input_tokens": 3685,
+          "output_tokens": 1429,
+          "seconds": 33.9
+        },
+        "fact_checker": {
+          "calls": 1,
+          "input_tokens": 2057,
+          "output_tokens": 737,
+          "seconds": 16.94
+        },
+        "writer": {
+          "calls": 1,
+          "input_tokens": 1335,
+          "output_tokens": 381,
+          "seconds": 8.79
+        },
+        "critic": {
+          "calls": 2,
+          "input_tokens": 1527,
+          "output_tokens": 1145,
+          "seconds": 26.0
+        },
+        "revise": {
+          "calls": 1,
+          "input_tokens": 1727,
+          "output_tokens": 504,
+          "seconds": 11.54
+        },
+        "claim_verify": {
+          "calls": 1,
+          "input_tokens": 2340,
+          "output_tokens": 632,
+          "seconds": 14.5
+        }
+      },
+      "total": {
+        "calls": 12,
+        "input_tokens": 12729,
+        "output_tokens": 5216,
+        "seconds": 121.53
+      }
+    },
+    "raw_coverage": 1.0,
+    "final_coverage": 1.0,
+    "claim_verify": {
+      "total": 8,
+      "supported": 5,
+      "partial": 0,
+      "unsupported": 3,
+      "unverified": 0
     }
   },
   {
     "topic": "固态电池量产进度与产业链",
     "ok": true,
-    "chars": 3386,
-    "elapsed_s": 151.2,
+    "chars": 3315,
+    "elapsed_s": 220.5,
     "metrics": {
       "citation_coverage": 1.0,
       "source_diversity": 7,
@@ -85,8 +206,8 @@
       "conflict_total": 4,
       "conflict_verified": true,
       "revisions": 2,
-      "total_citations": 33,
-      "fact_statements": 24,
+      "total_citations": 17,
+      "fact_statements": 16,
       "dangling_citations": [],
       "targets_met": true,
       "quality_ok": true
@@ -95,8 +216,8 @@
     "citation_errors": 0,
     "cleanup": {
       "autocited": 0,
-      "stripped": 1,
-      "marked": 2
+      "stripped": 2,
+      "marked": 1
     },
     "source_quality": {
       "total_sources": 11,
@@ -107,69 +228,191 @@
       },
       "corroborated": 4,
       "single_source": 7
+    },
+    "llm_usage": {
+      "nodes": {
+        "planner": {
+          "calls": 1,
+          "input_tokens": 56,
+          "output_tokens": 415,
+          "seconds": 10.91
+        },
+        "researcher": {
+          "calls": 5,
+          "input_tokens": 16642,
+          "output_tokens": 1645,
+          "seconds": 39.63
+        },
+        "fact_checker": {
+          "calls": 1,
+          "input_tokens": 2539,
+          "output_tokens": 1601,
+          "seconds": 35.72
+        },
+        "writer": {
+          "calls": 1,
+          "input_tokens": 3681,
+          "output_tokens": 1115,
+          "seconds": 25.1
+        },
+        "critic": {
+          "calls": 2,
+          "input_tokens": 5514,
+          "output_tokens": 981,
+          "seconds": 23.44
+        },
+        "revise": {
+          "calls": 1,
+          "input_tokens": 5287,
+          "output_tokens": 939,
+          "seconds": 21.45
+        },
+        "claim_verify": {
+          "calls": 2,
+          "input_tokens": 2650,
+          "output_tokens": 1523,
+          "seconds": 34.4
+        }
+      },
+      "total": {
+        "calls": 13,
+        "input_tokens": 36369,
+        "output_tokens": 8219,
+        "seconds": 190.65
+      }
+    },
+    "raw_coverage": 1.0,
+    "final_coverage": 1.0,
+    "claim_verify": {
+      "total": 14,
+      "supported": 10,
+      "partial": 0,
+      "unsupported": 4,
+      "unverified": 0
     }
   },
   {
     "topic": "AI 编程助手对软件工程流程的影响",
     "ok": true,
-    "chars": 3937,
-    "elapsed_s": 129.5,
+    "chars": 2894,
+    "elapsed_s": 134.0,
     "metrics": {
       "citation_coverage": 1.0,
-      "source_diversity": 9,
-      "source_pages": 14,
-      "conflict_handled": 1.0,
-      "conflict_total": 1,
-      "conflict_verified": true,
+      "source_diversity": 6,
+      "source_pages": 9,
+      "conflict_handled": null,
+      "conflict_total": 0,
+      "conflict_verified": false,
       "revisions": 2,
-      "total_citations": 33,
-      "fact_statements": 32,
+      "total_citations": 26,
+      "fact_statements": 26,
       "dangling_citations": [],
-      "targets_met": true,
+      "targets_met": false,
       "quality_ok": true
     },
     "blocking": false,
     "citation_errors": 0,
     "cleanup": {
       "autocited": 0,
-      "stripped": 2,
+      "stripped": 1,
       "marked": 6
     },
     "source_quality": {
-      "total_sources": 14,
+      "total_sources": 13,
       "tiers": {
-        "blog": 10,
+        "blog": 9,
         "unknown": 4
       },
       "corroborated": 0,
-      "single_source": 14
+      "single_source": 13
+    },
+    "llm_usage": {
+      "nodes": {
+        "planner": {
+          "calls": 1,
+          "input_tokens": 59,
+          "output_tokens": 287,
+          "seconds": 7.44
+        },
+        "researcher": {
+          "calls": 5,
+          "input_tokens": 13968,
+          "output_tokens": 1656,
+          "seconds": 39.29
+        },
+        "fact_checker": {
+          "calls": 1,
+          "input_tokens": 2669,
+          "output_tokens": 454,
+          "seconds": 10.48
+        },
+        "writer": {
+          "calls": 1,
+          "input_tokens": 2940,
+          "output_tokens": 1082,
+          "seconds": 24.33
+        },
+        "critic": {
+          "calls": 2,
+          "input_tokens": 3809,
+          "output_tokens": 937,
+          "seconds": 21.55
+        },
+        "revise": {
+          "calls": 1,
+          "input_tokens": 4185,
+          "output_tokens": 1191,
+          "seconds": 26.95
+        },
+        "claim_verify": {
+          "calls": 2,
+          "input_tokens": 2320,
+          "output_tokens": 918,
+          "seconds": 20.97
+        }
+      },
+      "total": {
+        "calls": 13,
+        "input_tokens": 29950,
+        "output_tokens": 6525,
+        "seconds": 151.01
+      }
+    },
+    "raw_coverage": 0.963,
+    "final_coverage": 1.0,
+    "claim_verify": {
+      "total": 12,
+      "supported": 10,
+      "partial": 2,
+      "unsupported": 0,
+      "unverified": 0
     }
   },
   {
     "topic": "人形机器人关节模组的成本结构",
     "ok": true,
-    "chars": 2868,
-    "elapsed_s": 143.3,
+    "chars": 1751,
+    "elapsed_s": 121.3,
     "metrics": {
       "citation_coverage": 1.0,
-      "source_diversity": 3,
-      "source_pages": 7,
-      "conflict_handled": 1.0,
-      "conflict_total": 3,
-      "conflict_verified": true,
+      "source_diversity": 4,
+      "source_pages": 6,
+      "conflict_handled": null,
+      "conflict_total": 0,
+      "conflict_verified": false,
       "revisions": 2,
       "total_citations": 24,
-      "fact_statements": 19,
+      "fact_statements": 21,
       "dangling_citations": [],
-      "targets_met": true,
+      "targets_met": false,
       "quality_ok": true
     },
     "blocking": false,
     "citation_errors": 0,
     "cleanup": {
-      "autocited": 0,
-      "stripped": 4,
-      "marked": 2
+      "autocited": 2,
+      "stripped": 2,
+      "marked": 0
     },
     "source_quality": {
       "total_sources": 8,
@@ -179,6 +422,67 @@
       },
       "corroborated": 2,
       "single_source": 6
+    },
+    "llm_usage": {
+      "nodes": {
+        "planner": {
+          "calls": 1,
+          "input_tokens": 57,
+          "output_tokens": 272,
+          "seconds": 6.45
+        },
+        "researcher": {
+          "calls": 5,
+          "input_tokens": 11369,
+          "output_tokens": 1221,
+          "seconds": 29.53
+        },
+        "fact_checker": {
+          "calls": 1,
+          "input_tokens": 2167,
+          "output_tokens": 399,
+          "seconds": 9.29
+        },
+        "writer": {
+          "calls": 1,
+          "input_tokens": 2205,
+          "output_tokens": 918,
+          "seconds": 20.67
+        },
+        "critic": {
+          "calls": 2,
+          "input_tokens": 2879,
+          "output_tokens": 838,
+          "seconds": 19.42
+        },
+        "revise": {
+          "calls": 1,
+          "input_tokens": 3229,
+          "output_tokens": 869,
+          "seconds": 20.18
+        },
+        "claim_verify": {
+          "calls": 3,
+          "input_tokens": 4217,
+          "output_tokens": 1076,
+          "seconds": 24.9
+        }
+      },
+      "total": {
+        "calls": 14,
+        "input_tokens": 26123,
+        "output_tokens": 5593,
+        "seconds": 130.44
+      }
+    },
+    "raw_coverage": 0.905,
+    "final_coverage": 1.0,
+    "claim_verify": {
+      "total": 17,
+      "supported": 16,
+      "partial": 0,
+      "unsupported": 1,
+      "unverified": 0
     }
   }
 ]

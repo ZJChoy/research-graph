@@ -34,8 +34,10 @@ def run_one(topic: str, workdir: Path) -> dict:
 
     import eval_run
     import graph_full
+    import llm_usage
     import source_quality
 
+    llm_usage.reset()
     t0 = time.time()
     app = graph_full.build(str(workdir / "cp.sqlite"))
     try:
@@ -75,6 +77,10 @@ def run_one(topic: str, workdir: Path) -> dict:
             "citation_errors": len(state.get("citation_errors") or []),
             "cleanup": cleanup,
             "source_quality": source_quality.summarize(state.get("final_notes") or []),
+            "llm_usage": llm_usage.snapshot(),
+            "raw_coverage": (state.get("raw_metrics") or {}).get("citation_coverage"),
+            "final_coverage": (state.get("final_metrics") or metrics).get("citation_coverage"),
+            "claim_verify": state.get("claim_verify_summary") or {},
         }
     except Exception as e:  # 单个主题失败不影响整批
         return {
@@ -101,11 +107,18 @@ def summarize(results: list) -> dict:
         "quality_ok": sum(1 for r in done if r["metrics"].get("quality_ok")),
         "coverage_mean": round(statistics.mean(cov), 3),
         "coverage_min": min(cov),
+        "raw_coverage_mean": round(statistics.mean(
+            [r["raw_coverage"] for r in done if r.get("raw_coverage") is not None] or [0]), 3),
         "dangling_total": sum(len(r["metrics"]["dangling_citations"]) for r in done),
         "conflicts_total": sum(r["metrics"]["conflict_total"] for r in done),
         "autocited_total": sum((r.get("cleanup") or {}).get("autocited", 0) for r in done),
         "stripped_total": sum((r.get("cleanup") or {}).get("stripped", 0) for r in done),
         "marked_total": sum((r.get("cleanup") or {}).get("marked", 0) for r in done),
+        "claim_supported_total": sum((r.get("claim_verify") or {}).get("supported", 0) for r in done),
+        "claim_partial_total": sum((r.get("claim_verify") or {}).get("partial", 0) for r in done),
+        "claim_unsupported_total": sum((r.get("claim_verify") or {}).get("unsupported", 0) for r in done),
+        "input_tokens_total": sum((r.get("llm_usage") or {}).get("total", {}).get("input_tokens", 0) for r in done),
+        "output_tokens_total": sum((r.get("llm_usage") or {}).get("total", {}).get("output_tokens", 0) for r in done),
         "median_elapsed_s": statistics.median([r["elapsed_s"] for r in done]),
     }
 
@@ -113,7 +126,7 @@ def summarize(results: list) -> dict:
 def render(results: list, summary: dict) -> str:
     lines = [
         "# 批量回归结果", "",
-        "| 主题 | 字数 | 覆盖率 | 来源(域名/页面) | 冲突 | 悬空 | 未达标 | 补引用/删句/标推断 | 多源印证 | 耗时 |",
+        "| 主题 | 字数 | 初稿→终稿覆盖率 | 来源(域名/页面) | 冲突 | 悬空 | 未达标 | 补引用/删句/标推断 | 断言核验 S/P/U | 耗时 |",
         "|---|---|---|---|---|---|---|---|---|---|",
     ]
     for r in results:
@@ -124,22 +137,33 @@ def render(results: list, summary: dict) -> str:
         sq = r["source_quality"]
         c = r.get("cleanup") or {}
         lines.append(
-            "| %s | %d | %.3f | %d/%d | %d | %d | %s | %d/%d/%d | %d/%d | %.0fs |" % (
-                r["topic"], r["chars"], m["citation_coverage"],
+            "| %s | %d | %s→%.3f | %d/%d | %d | %d | %s | %d/%d/%d | %d/%d/%d | %.0fs |" % (
+                r["topic"], r["chars"],
+                ("%.3f" % r["raw_coverage"]) if r.get("raw_coverage") is not None else "-",
+                r.get("final_coverage", m["citation_coverage"]),
                 m["source_diversity"], m["source_pages"], m["conflict_total"],
                 len(m["dangling_citations"]), "有" if r["blocking"] else "无",
                 c.get("autocited", 0), c.get("stripped", 0), c.get("marked", 0),
-                sq["corroborated"], sq["total_sources"], r["elapsed_s"],
+                (r.get("claim_verify") or {}).get("supported", 0),
+                (r.get("claim_verify") or {}).get("partial", 0),
+                (r.get("claim_verify") or {}).get("unsupported", 0),
+                r["elapsed_s"],
             )
         )
     lines += [
         "", "## 汇总", "",
         f"- 完成 {summary.get('ok', 0)}/{summary.get('n', 0)} 个主题",
         f"- targets_met：{summary.get('targets_met', 0)}；quality_ok：{summary.get('quality_ok', 0)}",
-        f"- 引用覆盖率 均值 {summary.get('coverage_mean', 0)}，最低 {summary.get('coverage_min', 0)}",
+        f"- 引用覆盖率：初稿均值 {summary.get('raw_coverage_mean', 0)} → "
+        f"终稿均值 {summary.get('coverage_mean', 0)}，最低 {summary.get('coverage_min', 0)}",
         f"- 悬空引用合计 {summary.get('dangling_total', 0)}；冲突检出合计 {summary.get('conflicts_total', 0)}",
         f"- 代码兜底合计：补引用 {summary.get('autocited_total', 0)} 句、"
         f"删句 {summary.get('stripped_total', 0)} 句、标推断 {summary.get('marked_total', 0)} 句",
+        f"- 断言核验合计：supported {summary.get('claim_supported_total', 0)} / "
+        f"partial {summary.get('claim_partial_total', 0)} / "
+        f"unsupported {summary.get('claim_unsupported_total', 0)}",
+        f"- Token 合计：{summary.get('input_tokens_total', 0)} input / "
+        f"{summary.get('output_tokens_total', 0)} output",
         f"- 单主题耗时中位数 {summary.get('median_elapsed_s', 0)} 秒",
     ]
     return "\n".join(lines) + "\n"

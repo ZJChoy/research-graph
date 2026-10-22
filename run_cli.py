@@ -10,10 +10,12 @@ from langgraph.types import Command
 
 import eval_run
 import graph_full
+import llm_usage
 import source_quality
 
 
 def main(topic: str) -> None:
+    llm_usage.reset()
     app = graph_full.build()
     try:
         # 并行调研最多 3 路同时跑，避免一次打太多搜索请求被限流
@@ -51,12 +53,18 @@ def main(topic: str) -> None:
             "final_notes": state.get("final_notes") or [],
             "conflicts": state.get("conflicts") or [],
             "solitary": state.get("solitary") or [],
+            "conflict_candidates": state.get("conflict_candidates") or {},
             "review_report": state.get("review_report") or {},
             "revision_count": state.get("revision_count") or 0,
             "citation_errors": state.get("citation_errors") or [],
             "grounding_warnings": state.get("grounding_warnings") or [],
             "citation_meta": state.get("citation_meta") or {},
             "source_quality": source_quality.summarize(state.get("final_notes") or []),
+            "llm_usage": llm_usage.snapshot(),
+            "raw_metrics": state.get("raw_metrics") or {},
+            "final_metrics": state.get("final_metrics") or metrics,
+            "claim_verification": state.get("claim_verification") or [],
+            "claim_verify_summary": state.get("claim_verify_summary") or {},
             "metrics": metrics,
             "quality_ok": quality_ok,
         }
@@ -66,6 +74,24 @@ def main(topic: str) -> None:
         print("指标:", metrics)
         sq = snapshot["source_quality"]
         print("来源质量:", sq["tiers"], "| 多源印证 %d/%d" % (sq["corroborated"], sq["total_sources"]))
+        u = snapshot["llm_usage"]["total"]
+        print("模型用量: %d 次调用, %d input / %d output tokens, %.1fs"
+              % (u["calls"], u["input_tokens"], u["output_tokens"], u["seconds"]))
+        cv = snapshot["claim_verify_summary"]
+        if cv.get("total"):
+            print("断言核验: %d 句（supported %d / partial %d / unsupported %d / unverified %d）"
+                  % (cv["total"], cv["supported"], cv["partial"],
+                     cv["unsupported"], cv["unverified"]))
+        raw_cov = (snapshot["raw_metrics"] or {}).get("citation_coverage")
+        final_cov = snapshot["final_metrics"]["citation_coverage"]
+        counts = {"autocited": 0, "stripped": 0, "marked": 0}
+        for w in snapshot["grounding_warnings"]:
+            counts["autocited"] += w.get("autocited_sentences", 0)
+            counts["stripped"] += w.get("stripped_unsupported_sentences", 0)
+            counts["marked"] += w.get("marked_inferences", 0)
+        if raw_cov is not None:
+            print("覆盖率: 初稿 %.3f -> 终稿 %.3f（补引用 %d / 删句 %d / 标推断 %d）"
+                  % (raw_cov, final_cov, counts["autocited"], counts["stripped"], counts["marked"]))
         if not quality_ok:
             print("警告：硬指标未达标或仍有未解决的引用问题（见 demo_state.json）")
         elif not review.get("pass"):

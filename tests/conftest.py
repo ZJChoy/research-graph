@@ -12,6 +12,8 @@ sys.path.insert(0, str(ROOT))
 # 测试永不联网、不读写真实缓存
 os.environ["RESEARCH_GRAPH_NO_CACHE"] = "1"
 os.environ.setdefault("DASHSCOPE_API_KEY", "test-key")
+# 单元测试不跑断言核验（它会额外调用模型）；单独测 claim_verify 时再显式打开
+os.environ.setdefault("CLAIM_VERIFY_ENABLED", "0")
 
 
 @pytest.fixture

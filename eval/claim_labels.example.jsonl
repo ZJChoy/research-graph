@@ -1,0 +1,8 @@
+{"claim": "寒武纪 MLU370-S 的算力为 256 TOPS", "source": "寒武纪 MLU370-S 在 FP16 精度下提供 256 TOPS 算力。", "label": "supported"}
+{"claim": "该芯片于 2025 年实现量产", "source": "公司确认该芯片将于 2025 年实现量产。", "label": "supported"}
+{"claim": "该芯片的算力为 512 TOPS", "source": "该芯片的算力为 256 TOPS。", "label": "unsupported"}
+{"claim": "该芯片尚未量产", "source": "该芯片已于 2025 年 Q1 实现量产。", "label": "unsupported"}
+{"claim": "所有厂商的端侧芯片算力都超过 100 TOPS", "source": "部分厂商的旗舰端侧芯片算力超过 100 TOPS。", "label": "partial"}
+{"claim": "该产品于 2025 年正式发布", "source": "该产品在 2025 年发布预告，计划 2026 年正式上市。", "label": "unsupported"}
+{"claim": "关节模组占整机成本约 50%", "source": "关节模组占整机 BOM 成本约 35%。", "label": "unsupported"}
+{"claim": "该 NPU 支持 INT4 精度", "source": "该 NPU 支持 INT4/INT8 量化。", "label": "supported"}

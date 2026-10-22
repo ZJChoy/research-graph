@@ -10,3 +10,4 @@ checkpoints/
 .cache/
 .pytest_tmp/
 .batch_run/
+runs/

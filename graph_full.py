@@ -6,6 +6,7 @@
 3. 去掉占位节点，human_review 直接条件边返回 Send 列表做 Map-Reduce。
 """
 import json
+import os
 import re
 import sqlite3
 
@@ -15,9 +16,11 @@ from langgraph.types import Send, interrupt
 
 from critic import critic, route_after_critic
 from fact_checker import check_all
+import claim_verify
+import eval_run
 import source_quality
 from grounding import audit_draft, autocite, mark_inferences, strip_unsupported
-from llm import get_llm
+from llm import get_llm, invoke
 from researcher import research_one
 from sources import cited_indices, conflict_appendix, finalize_report
 from state_full import GraphState
@@ -26,7 +29,8 @@ llm = get_llm()
 
 
 def planner(state: dict) -> dict:
-    resp = llm.invoke(
+    resp = invoke(
+        llm, "planner",
         f"你是调研规划专家。主题：{state['topic']}。\n"
         "请输出一份 4-6 节的调研大纲（Markdown 二级标题列表），"
         "每节一句话说明要查什么。只输出大纲本身。"
@@ -44,7 +48,8 @@ def human_review(state: dict) -> dict:
         return {}
     if not isinstance(feedback, str) or not feedback.strip():
         return {}
-    resp = llm.invoke(
+    resp = invoke(
+        llm, "human_review",
         f"主题：{state['topic']}\n原大纲：\n{state['outline']}\n\n"
         f"人工修改意见：{feedback}\n\n请输出修改后的完整大纲（Markdown），只输出大纲本身。"
     )
@@ -82,6 +87,7 @@ def fact_checker_node(state: dict) -> dict:
     return {
         "conflicts": verdict.get("conflicts", []),
         "solitary": verdict.get("solitary", []),
+        "conflict_candidates": verdict.get("candidate_review", {}),
     }
 
 
@@ -168,10 +174,15 @@ def _finalize_only(draft: str, notes: list, conflicts: list | None = None) -> di
 
 def audit_node(state: dict) -> dict:
     """成稿层接地检查：放在 critic 之后，保证参与审稿的就是被检查的那一版。"""
-    errors, warnings = audit_draft(state.get("draft", ""), state.get("final_notes") or [])
+    draft = state.get("draft", "")
+    errors, warnings = audit_draft(draft, state.get("final_notes") or [])
     meta = state.get("citation_meta") or {}
     errors = [{"type": "dropped", "index": i} for i in meta.get("dropped", [])] + errors
-    return {"citation_errors": errors, "grounding_warnings": warnings}
+    # 初稿指标：code_clean 之前的口径，用来衡量模型本身写得怎么样
+    raw = eval_run.evaluate(draft, state.get("conflicts") or [],
+                            state.get("revision_count") or 0)
+    return {"citation_errors": errors, "grounding_warnings": warnings,
+            "raw_metrics": raw}
 
 
 def code_clean(state: dict) -> dict:
@@ -197,13 +208,33 @@ def code_clean(state: dict) -> dict:
         draft, meta = finalize_report(marked_text, notes)
     errors, warnings = audit_draft(draft, notes)
     out = {"draft": draft, "citation_errors": errors, "citation_meta": meta,
-           "grounding_warnings": warnings}
+           "grounding_warnings": warnings,
+           "final_metrics": eval_run.evaluate(
+               draft, state.get("conflicts") or [], state.get("revision_count") or 0)}
     if added:
         out["grounding_warnings"] += [{"autocited_sentences": added}]
     if removed:
         out["grounding_warnings"] += [{"stripped_unsupported_sentences": removed}]
     if marked:
         out["grounding_warnings"] += [{"marked_inferences": marked}]
+    return out
+
+
+def claim_verify_node(state: dict) -> dict:
+    """断言级核验：对最终稿再问一次「来源是否真的支持这句话」。"""
+    if os.getenv("CLAIM_VERIFY_ENABLED", "1").lower() in ("0", "false", "no"):
+        return {}
+    detail, summary = claim_verify.verify_claims(
+        state.get("draft", ""), state.get("final_notes") or []
+    )
+    out = {"claim_verification": detail, "claim_verify_summary": summary}
+    if os.getenv("CLAIM_VERIFY_STRICT", "").lower() in ("1", "true", "yes"):
+        bad = [d for d in detail if d.get("verdict") == "unsupported"]
+        if bad:
+            out["citation_errors"] = (state.get("citation_errors") or []) + [
+                {"type": "claim_unsupported", "sentence": d["sentence"],
+                 "reason": d.get("reason", "")} for d in bad
+            ]
     return out
 
 
@@ -218,7 +249,8 @@ def writer(state: dict) -> dict:
     solitary_text = "\n".join(f"- {s}" for s in solitary[:8]) or "（无）"
     # 篇幅跟着资料量走：笔记少就别硬凑，凑出来的都是没出处的句子
     target = max(600, min(1600, 120 * len(flat)))
-    resp = llm.invoke(
+    resp = invoke(
+        llm, "writer",
         f"主题：{state['topic']}\n大纲：\n{state['outline']}\n\n"
         f"资料笔记：\n{numbered}\n\n"
         f"已发现的矛盾（必须在报告里说明或回避）：\n"
@@ -245,7 +277,8 @@ def revise(state: dict) -> dict:
     citation_errors = state.get("citation_errors") or []
     flat = collect_notes(state)
     old = state.get("draft", "")
-    resp = llm.invoke(
+    resp = invoke(
+        llm, "revise",
         f"以下报告未通过审稿：\n{old}\n\n"
         f"审稿意见：{json.dumps(problems, ensure_ascii=False)}\n\n"
         f"可用资料笔记（编号只能用到 [{len(flat)}]）：\n{_numbered_notes(flat)}\n\n"
@@ -270,6 +303,13 @@ def revise(state: dict) -> dict:
 def build(db_path: str = "checkpoints.sqlite"):
     conn = sqlite3.connect(db_path, check_same_thread=False)
     saver = SqliteSaver(conn)
+    try:
+        import checkpoint_prune
+        pruned = checkpoint_prune.prune(conn)
+        if pruned:
+            print(f"[build] 清理了 {pruned} 个旧 checkpoint 线程")
+    except Exception as e:  # 清理失败不影响建图
+        print(f"[build] checkpoint 清理跳过: {e}")
 
     g = StateGraph(GraphState)
     g.add_node("planner", planner)
@@ -281,6 +321,7 @@ def build(db_path: str = "checkpoints.sqlite"):
     g.add_node("critic", critic)
     g.add_node("revise", revise)
     g.add_node("code_clean", code_clean)
+    g.add_node("claim_verify", claim_verify_node)
 
     g.set_entry_point("planner")
     g.add_edge("planner", "human_review")
@@ -291,7 +332,8 @@ def build(db_path: str = "checkpoints.sqlite"):
     g.add_edge("audit", "critic")
     g.add_conditional_edges("critic", route_after_critic, {"revise": "revise", "clean": "code_clean"})
     g.add_edge("revise", "audit")
-    g.add_edge("code_clean", END)
+    g.add_edge("code_clean", "claim_verify")
+    g.add_edge("claim_verify", END)
 
     app = g.compile(checkpointer=saver)
     # 把连接挂到 app 上，调用方（server/run_cli）跑完可以 close，避免连接泄漏

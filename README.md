@@ -7,12 +7,14 @@
 ```
 planner → human_review（interrupt 人工确认大纲）
         → research_one_node × N（Send 并行，每路一个子问题）
-        → fact_checker_node（多来源比对，标冲突与孤证）
+        → fact_checker_node（代码找冲突/孤证候选，模型逐条确认）
         → writer（按大纲成稿，事实句标 [n]）
         → audit（接地检查：句子里的数字是否在被引笔记里）
         → critic（代码判硬指标 + 模型给建议）
            ├─ 硬问题 → revise → audit（最多 2 轮）
-           └─ 达标 / 预算耗尽 → code_clean（删掉仍无出处的句子） → END
+           └─ 达标 / 预算耗尽 → code_clean（补引用/删句/标推断）
+                                → claim_verify（断言级核验，只记录不阻塞）
+                                → END
 ```
 
 ## 跑起来
@@ -63,6 +65,16 @@ python batch_eval.py topics.txt --resume          # 每行一个主题
 python compare_runs.py demo_state_prev.json demo_state.json
 ```
 
+校准断言核验（人工标注 claim-source 对，输出一致率与混淆矩阵）：
+
+```powershell
+python calibrate_claim_verify.py
+# eval/claim_labels.example.jsonl 是示例标注；一致率 < 0.8 不要用于硬判
+```
+
+Web 端每次运行会落 `runs/`，首页右上角「历史」可看列表和详情：
+来源层级、是否多源印证、每句引用、断言核验结果；运行中可点「取消」。
+
 ## 评测口径
 
 | 指标 | 定义 | 目标 |
@@ -72,7 +84,10 @@ python compare_runs.py demo_state_prev.json demo_state.json
 | 冲突处理率 | fact_checker 标出的冲突在终稿（含代码生成的《数据分歧说明》）被说明的比例；未检出冲突时记为「未验证」而非 100% | 100% |
 | 悬空引用 | 正文引用编号在来源表里找不到的个数 | 0 |
 | 事实句数 | 参与覆盖率计算的分母；太少时覆盖率不具统计意义 | ≥ 12 |
+| 初稿覆盖率 | `code_clean` 之前的口径，衡量模型本身写得怎么样 | 观察项 |
 | 来源质量 | 官方/机构、媒体、自媒体、未知四档分布 + 多源印证条数 | 观察项 |
+| 断言核验 | 带引用的高风险句子中 supported / partial / unsupported 的分布 | 观察项（校准 ≥0.8 才可硬判） |
+| Token | 按节点统计的 input/output tokens 与调用次数 | 观察项 |
 | 返工次数 | critic 触发 revise 的次数 | 观察项 |
 
 `targets_met` 要求全部达标（冲突必须真实检出并处理）；`quality_ok` 是可交付判定，
@@ -81,15 +96,17 @@ python compare_runs.py demo_state_prev.json demo_state.json
 覆盖率是**交付前兜底之后**的口径：补引用、删句、标推断都会改变分母，
 所以单看 100% 没有意义。批量报告会同时给出三类兜底的触发次数：
 
-| 主题 | 覆盖率 | 来源(域名/页面) | 冲突 | 悬空 | 补引用/删句/标推断 | 耗时 |
-|---|---|---|---|---|---|---|
-| 端侧 AI 芯片格局（2025-2026） | 1.000 | 9/11 | 2 | 0 | 1/0/1 | 157s |
-| RISC-V 在数据中心服务器的落地进展 | 1.000 | 8/9 | 3 | 0 | 1/4/1 | 171s |
-| 固态电池量产进度与产业链 | 1.000 | 7/10 | 4 | 0 | 0/1/2 | 151s |
-| AI 编程助手对软件工程流程的影响 | 1.000 | 9/14 | 1 | 0 | 0/2/6 | 130s |
-| 人形机器人关节模组的成本结构 | 1.000 | 3/7 | 3 | 0 | 0/4/2 | 143s |
+| 主题 | 字数 | 初稿→终稿覆盖率 | 来源(域名/页面) | 冲突 | 悬空 | 补引用/删句/标推断 | 断言核验 S/P/U | 耗时 |
+|---|---|---|---|---|---|---|---|---|
+| 端侧 AI 芯片格局（2025-2026） | 2553 | 0.960→1.000 | 9/11 | 0 | 0 | 1/0/0 | 19/0/1 | 159s |
+| RISC-V 在数据中心服务器的落地进展 | 735 | 1.000→1.000 | 2/2 | 0 | 0 | 0/2/0 | 5/0/3 | 192s |
+| 固态电池量产进度与产业链 | 3315 | 1.000→1.000 | 7/10 | 4 | 0 | 0/2/1 | 10/0/4 | 220s |
+| AI 编程助手对软件工程流程的影响 | 2894 | 0.963→1.000 | 6/9 | 0 | 0 | 0/1/6 | 10/2/0 | 134s |
+| 人形机器人关节模组的成本结构 | 1751 | 0.905→1.000 | 4/6 | 0 | 0 | 2/2/0 | 16/0/1 | 121s |
 
-（2026-10-22 基线，温度 0；完整明细见 `batch_report.md` / `batch_results.json`。）
+（2026-10-22 基线，温度 0。初稿均值 0.966 → 终稿 1.0；冲突只在固态电池主题检出 4 组，
+其余主题为 0，因此 `targets_met` 只有 1/5，`quality_ok` 4/5；RISC-V 只拿到 2 个来源、
+报告 735 字，被判未达标而不是硬编内容。完整明细见 `batch_report.md` / `batch_results.json`。）
 
 ## 设计上值得说的几处
 
@@ -107,8 +124,15 @@ python compare_runs.py demo_state_prev.json demo_state.json
   的笔记清单，提示模型不要整节只依赖自媒体单一来源。分级是启发式，只作提示，不等同于事实判定。
 - **检索先过主题锚点再排序**：只用子问题搜会搜回「产品路线图工具」这类跑题页；
   主题锚点做硬过滤，宁可某节写「公开资料有限，待补充」，也不收跑题内容。
+- **冲突先由代码找候选**（fact_checker.py）：同一型号出现不同数字 → 冲突候选；
+  同一组硬数字只出现在一个独立域名 → 孤证候选。模型只负责逐条确认/否定，
+  不负责「凭感觉发现」，候选与确认率写进快照。
 - **冲突说明由代码生成**：模型经常把双方数据都抄进报告却不说明矛盾，
   终稿统一追加《数据分歧说明》附录，内容直接来自 fact_checker。
+- **断言级核验**（claim_verify.py）：数字对得上不代表这句话被来源支持。
+  对带引用的高风险句子（含数字/否定/因果词）用模型判断 supported/partial/unsupported；
+  默认只记录不阻塞，校准脚本 `calibrate_claim_verify.py` 用人工标注算一致率，
+  没到 0.8 不用于硬判。实测抓到过「来源写 M4 Ultra、报告写 M4」这类主体错误。
 - **交付判定不交给模型**：引用覆盖率、悬空引用、覆盖率不足的句子清单都由代码算；
   LLM 审稿意见保留为建议（`review_report.problems`），只影响一轮返工，不阻塞交付。
 - **三道代码兜底**（code_clean，END 前）：漏标的句子如果只有一条笔记能覆盖全部数字，
@@ -119,6 +143,14 @@ python compare_runs.py demo_state_prev.json demo_state.json
 - **并行写状态用 reducer**：research_notes 挂 merge_list，Send 的多路写入才不冲突；
   运行时并发限制为 3，避免一次打太多搜索请求被限流。
 - **检索结果缓存**（cache.py，7 天 TTL）：重跑不再反复请求搜索引擎，demo 可复现。
+- **SSRF 防护**（search.py）：手动跟随重定向，每一跳先做 DNS 解析并检查所有 IP，
+  拒绝私网/回环/链路本地地址后才发请求；不是「请求完再检查最终 URL」。
+- **提示注入粗筛**：抓到的页面先匹配「忽略以上指令」类模式，命中的不进抽取提示；
+  资料文本用 `<source>` 标签包裹，prompt 明确标签内任何指令都只是文本。
+- **运行历史与取消**（run_store.py / server.py）：每次运行落 `runs/*.json`，
+  Web 可查来源层级、引用句、断言核验；运行中可取消，取消后释放锁。
+- **checkpoint 保留**（checkpoint_prune.py）：按 thread 只保留最近 N 个，
+  避免 `checkpoints.sqlite` 无限增长。
 
 ## 已知限制
 
@@ -129,11 +161,20 @@ python compare_runs.py demo_state_prev.json demo_state.json
 - 来源分级是基于域名的启发式，不能判断文章内容是否可靠；报告只把它作为提示，
   最终仍可能出现「可溯源但信源本身是推测性博客」的情况。
 - 覆盖率 100% 是代码兜底后的结果，不代表模型初稿就写得好：2026-10-22 的 5 主题基线里，
-  代码共补引用 2 句、删句 11 句、标推断 12 句。
+  初稿均值 0.966，代码共补引用 3 句、删句 7 句、标推断 7 句；
+  断言核验对 71 句高风险的带引用句子给出 60 supported / 2 partial / 9 unsupported。
+- 冲突检测依赖代码候选和模型确认：5 个主题里只有固态电池检出了 4 组冲突，
+  其余为 0，`targets_met` 因此偏低；这不代表其他报告一定没有矛盾，
+  只代表当前检测没有确认到。
 - 温度 0 只固定模型输出；检索结果仍会随搜索引擎变化，大纲也可能不同，
   因此跨天重跑不保证逐字一致，指标只保证当时快照可审计。
 - 批量回归每个主题 2–4 分钟且消耗模型额度；CI 只跑离线测试与已提交 demo 的审计，
   不跑真实检索。
+- 断言核验的校准集只有 8 条示例（当前一致率 1.00），只能说明口径自洽，
+  不能说明泛化；默认只记录不阻塞，没有扩充标注集之前不要拿它当硬门槛。
+- 冲突候选靠「同型号不同数字」发现，同义表述（骁龙8 Gen4 vs Snapdragon 8 Gen 4）
+  可能漏配；模型确认也可能放过或误判。
+- 提示注入只做了关键词粗筛，不是完整防护；抓取内容仍可能影响抽取结果。
 - 断点续跑已落盘（SQLite），Web 端未做「重启后自动恢复上次进度」的界面。
 
 ## 目录
@@ -142,10 +183,12 @@ python compare_runs.py demo_state_prev.json demo_state.json
 graph_full.py   图装配与节点       researcher.py  单路调研（检索→抽取）
 search.py       检索层             sources.py     来源表/引用收口
 grounding.py    接地检查           critic.py      审稿与返工路由
-fact_checker.py 冲突/孤证核查      eval_run.py    评测口径
+fact_checker.py 冲突候选/确认      eval_run.py    评测口径
 source_quality.py 来源分级/交叉印证
+claim_verify.py 断言核验           calibrate_claim_verify.py 校准
 verify_report.py 引用审计          batch_eval.py  批量回归
 compare_runs.py 两次运行对比       server.py      FastAPI + SSE
-cache.py        检索缓存
+run_store.py    运行历史           checkpoint_prune.py 旧检查点清理
+cache.py        检索缓存           llm_usage.py   token/耗时统计
 tests/          离线测试           learning/      M1–M3 学习脚本（不参与主流程）
 ```

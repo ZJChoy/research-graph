@@ -42,8 +42,8 @@ _PUB = re.compile(r"(20\d{2})\s*[-年/.]\s*\d{1,2}")
 
 def domain(url: str) -> str:
     try:
-        host = (urlparse(url).hostname or "").lower()
-    except ValueError:
+        host = (urlparse(url or "").hostname or "").lower()
+    except (ValueError, TypeError):
         return ""
     return host[4:] if host.startswith("www.") else host
 
